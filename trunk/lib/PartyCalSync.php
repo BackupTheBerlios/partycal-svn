@@ -111,7 +111,7 @@ class PartyCalSync extends PartyCal {
 		$stmt = $this->pdo->prepare('
 			SELECT * 
 			FROM event 
-			LEFT JOIN event_subscriber 
+			JOIN event_subscriber 
 			ON (event.event_id = event_subscriber.event_id)
 			WHERE event_subscriber.subscriber_name IS NULL
 		');
