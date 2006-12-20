@@ -34,6 +34,18 @@ class PartyCalAdmin extends PartyCal {
 		');
 	}
 
+	public function actionaddsubscriber($mode)
+	{
+		return;
+		// this snippet should move on to ./partycal-admin addsubscriber gcal
+		$myCalendars = $this->cal->getCalendarListFeed();
+		foreach ($myCalendars as $entry) {
+			var_dump($entry->title());
+			var_dump($entry->id());
+		}
+	
+	}
+
 }
 
 ?>
