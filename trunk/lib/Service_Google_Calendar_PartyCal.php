@@ -11,27 +11,20 @@ class Service_Google_Calendar_PartyCal {
 	public $client;
 	public $cal;
 
-	public function __construct( $confkey , $uri ) {
-
+	public function __construct( $confkey , $uri ) 
+	{
 		$this->conf = new Config_PartyCal( $confkey );
 		$this->uri = $uri;
 
 		$this->makeAuthedClient();
 	}
 
-	public function makeAuthedClient() {
-
+	public function makeAuthedClient() 
+	{
 		$this->client = Zend_Gdata_ClientLogin::getHttpClient( $this->conf->email ,
 								       $this->conf->passwd ,
 								       'cl' );
 		$this->cal = new Zend_Gdata_Calendar( $this->client );
-
-		// this snippet should move on to ./partycal-admin addsubscriber gcal
-		$myCalendars = $this->cal->getCalendarListFeed();
-		foreach ($myCalendars as $entry) {
-			var_dump($entry->title());
-			var_dump($entry->id());
-		}
 	}
 
 	public function createOrUpdate($item)
@@ -51,15 +44,11 @@ class Service_Google_Calendar_PartyCal {
   <gd:when startTime="'.$item['start_ts'].'"
     endTime="'.$item['end_ts'].'"></gd:when>
   <gd:eventStatus value="http://schemas.google.com/g/2005#event.confirmed"/>
-<!-- <gd:visibility value="http://schemas.google.com/g/2005#event.public"/> -->
-  <gd:visibility value="http://schemas.google.com/g/2005#event.private"/>
+  <gd:visibility value="http://schemas.google.com/g/2005#event.public"/> 
   <gd:transparency value="http://schemas.google.com/g/2005#event.transparent"/>
 </entry>';
-var_dump($xmlString);
-//		$this->cal->post( $xmlString );
 		$this->cal->post( $xmlString , $this->conf->feed );
 	}
-
 }
 
 ?>
