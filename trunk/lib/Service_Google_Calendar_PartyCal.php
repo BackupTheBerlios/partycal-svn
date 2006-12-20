@@ -35,7 +35,11 @@ class Service_Google_Calendar_PartyCal {
   <title type="text">'.$item['event_name'].'</title>
   <link rel="http://schemas.google.com/g/2005#onlineLocation" type="text/html" href="'.htmlspecialchars($item['link']).'"/>
 <!--  <link rel="http://schemas.google.com/g/2005#image type="image/jpg" href="http://petzi.ch/images/logo_petzi.jpg"/>-->
-  <content type="text">'.$item['shortdesc'].'</content>
+  <content type="text">'.$item['shortdesc'].'
+  -- 
+  this event was posted by the Swiss Party Calendar Synchronizer
+  http://partycal.wordpress.com/ 
+  </content>
   <author>
     <name>PartyCal</name>
     <email>'.$this->conf->email.'</email>
