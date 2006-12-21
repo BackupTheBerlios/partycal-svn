@@ -1,5 +1,8 @@
 <?php
 /**
+ * PartyCal based Synchronization Suite.
+ */
+/**
  * The main class for syncing PartyCal.
  *
  * Released under the GNU GPL
@@ -50,7 +53,7 @@ class PartyCalSync extends PartyCal {
 	 * the data gets inserted into the db, existing db constraints ensure that no duplicates 
 	 * get added, this implys some care taking when coding new providers.
 	 *
-	 * \todo the db schema here is not final, it needs serious refining for supporting more than 2 providers
+	 * @todo the db schema here is not final, it needs serious refining for supporting more than 2 providers
 	 */
 	public function loadNewData() {
 

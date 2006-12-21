@@ -1,7 +1,20 @@
 <?php
+/**
+ * Provider integration for petzi.ch.
+ *
+ * consider this the main place for developing the providers api for now
+ */
 
+/**
+ * Zend Framework Feed
+ */
 require_once 'Zend/Feed.php';
 
+/**
+ * reader for Petzi Feeds.
+ *
+ * this will get changed to an object composition
+ */
 class Feed_Petzi_PartyCal extends Zend_Feed {
 
 	public function getInsertData(Zend_Feed_EntryRss $item) {

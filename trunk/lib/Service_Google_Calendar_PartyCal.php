@@ -1,11 +1,35 @@
 <?php
+/**
+ * Google Calendar Integration 
+ *
+ * proof-of-concept subscriber
+ * @todo rework as reference provider implementation
+ */
 
+/**
+ * Zend Framework Gdata
+ */
 require_once 'Zend/Gdata.php';
+/**
+ * Zend Framework Gdata ClientLogin
+ */
 require_once 'Zend/Gdata/ClientLogin.php';
+/**
+ * Zend Framework Gdata Calendar
+ */
 require_once 'Zend/Gdata/Calendar.php';
+/**
+ * Zend Framework Http Cookie
+ */
 require_once 'Zend/Http/Cookie.php';
+/**
+ * Zend Framework Http Client
+ */
 require_once 'Zend/Http/Client.php';
 
+/**
+ * Main Provider Class for Google Calendar Data.
+ */
 class Service_Google_Calendar_PartyCal {
 
 	public $client;
@@ -27,6 +51,10 @@ class Service_Google_Calendar_PartyCal {
 		$this->cal = new Zend_Gdata_Calendar( $this->client );
 	}
 
+	/**
+	 *
+	 * @todo the xml generation part (hehe) must get changes soon
+	 */
 	public function createOrUpdate($item)
 	{
 		$xmlString = '<entry xmlns="http://www.w3.org/2005/Atom"

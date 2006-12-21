@@ -1,8 +1,21 @@
 <?php
+/**
+ * Basic Configuration Handling
+ */
 
+/**
+ * Zend Framework Config
+ */
 require_once 'Zend/Config.php';
+
+/**
+ * Zend Framework Config Ini
+ */
 require_once 'Zend/Config/Ini.php';
 
+/**
+ * Configuration Handler for PartyCal
+ */
 class Config_PartyCal extends Zend_Config {
 
 	public function __construct( $node )

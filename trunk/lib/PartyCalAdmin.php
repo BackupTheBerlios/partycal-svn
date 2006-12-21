@@ -1,5 +1,9 @@
 <?php
 /**
+ * PartyCal based Controller for admin stuff
+ */
+
+/**
  * The main class for administrating PartyCal.
  *
  * Released under the GNU GPL

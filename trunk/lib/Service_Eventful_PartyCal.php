@@ -1,7 +1,18 @@
 <?php
+/**
+ * eventful.com integration.
+ * 
+ * work in progress, veeeeeeery beta.
+ */
 
+/**
+ * Zend Framework Rest Services.
+ */
 require_once 'Zend/Service/Rest.php';
 
+/**
+ * Main eventful class
+ */
 class Service_Eventful_PartyCal {
 
 	public function __construct( $confkey , $uri ) {

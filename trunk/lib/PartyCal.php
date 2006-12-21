@@ -1,11 +1,14 @@
 <?php
 /**
- * The main class for CLI based usage of PartyCal.
+ * Basic Controller for CLI Interaction.
  *
  * Released under the GNU GPL
  * Lucas S. Bickel 2006
  */
 
+/**
+ * The main class for CLI based usage of PartyCal.
+ */
 class PartyCal {
 
 	public $conf;
