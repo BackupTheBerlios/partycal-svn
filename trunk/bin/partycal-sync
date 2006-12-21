@@ -11,17 +11,13 @@
  *
  * partycal is based on php6 and zend framework, hack the lines in lib/PartyCalSetup.php or add the right stuff to php.ini.
  * 
- * Released under the GNU GPL
+ * Released under the GNU GPL or any other OSI certified license.
  * Lucas S. Bickel 2006
  */
 
 define('PartyCal_MAIN_METHOD', 'PartyCalSync::main()');
 
-require_once 'lib/PartyCalSetup.php';
-
-function __autoload($classname) {
-	require_once 'lib/'.$classname.'.php';
-}
+require_once dirname(__FILE__).'/partycal';
 
 if (PartyCal_MAIN_METHOD == 'PartyCalSync::main()') {
 	$PartyCalSync = new PartyCalSync( 'partycal-sync', $argv );

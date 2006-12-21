@@ -11,7 +11,7 @@
  *
  * partycal is based on php6 and zend framework, hack the lines in lib/PartyCalSetup.php or add the right stuff to php.ini.
  * 
- * Released under the GNU GPL
+ * Released under the GNU GPL or any other OSI certified license.
  * Lucas S. Bickel 2006
  */
 
