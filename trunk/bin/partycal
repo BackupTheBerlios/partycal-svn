@@ -23,6 +23,8 @@ if ( !isset( $_ENV['PARTYCAL_ROOT'] ) ) {
 
 require_once $_ENV['PARTYCAL_ROOT'].'/lib/PartyCalBootstrap.php';
 
+require_once 'Config.php';
+
 function __autoload($classname) {
 	require_once $classname.'.php';
 }
