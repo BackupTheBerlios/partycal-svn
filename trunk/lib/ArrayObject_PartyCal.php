@@ -1,6 +1,10 @@
 <?php
 /**
  * Array Extension for PartyCal.
+ *
+ * @copyright Released under the GNU GPL, see LICENSE for more Information
+ * @author Lucas S. Bickel 
+ * @package core
  */
 
 /**
@@ -8,15 +12,24 @@
  */
 class ArrayObject_PartyCal extends ArrayObject {
 
-	public function __construct( $listing ) {
+	/**
+	 * create array object with props set.
+	 *
+	 * @param $array Array data for populating the array
+	 */
+	public function __construct( $array ) {
 
-		parent::__construct( $listing->getData() , 
+		parent::__construct( $array , 
 				     ArrayObject::ARRAY_AS_PROPS );
 
 	}
 
 	/**
-	 * dump an array in some style that will get replaced sometimes soon
+	 * string output.
+	 *
+	 * @return String
+	 *
+	 * @todo replace this with something sensible
 	 */
 	public function __toString() {
 		$i = $this->getIterator();
@@ -29,7 +42,6 @@ class ArrayObject_PartyCal extends ArrayObject {
 
 		return $s;
 	}
-	
 }
 
 ?>
