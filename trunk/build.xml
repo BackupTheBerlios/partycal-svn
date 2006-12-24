@@ -4,19 +4,21 @@
 
   <!-- Unit Tests -->
   <fileset dir="." id="unit-tests">
-   <include name="test/core/*Test.php"/>
+   <include name="test/*/*Test.php"/>
   </fileset>
  
   <!-- PHP Libs -->
-  <fileset dir="." id="php-libs">
-   <include name="lib/PartyCal.php"/>
-   <include name="lib/PartyCalAdmin.php"/>
-   <include name="lib/PartyCalSync.php"/>
+  <fileset dir="lib" id="php-libs">
+   <include name="ArrayObject.php"/>
+   <include name="ArrayObject/Listing.php"/>
+   <include name="ArrayObject/Listing/Provider.php"/>
+   <include name="ArrayObject/Listing/Subscriber.php"/>
 
-   <include name="lib/ArrayObject_PartyCal.php"/>
-   <include name="lib/ProviderArray_PartyCal.php"/>
-   <include name="lib/SubscriberArray_PartyCal.php"/>
-   <!--Config_PartyCal.php-->
+   <include name="PartyCal.php"/>
+   <include name="PartyCalAdmin.php"/>
+   <include name="PartyCalSync.php"/>
+   <include name="Config.php"/>
+
   </fileset>
 
 
@@ -27,9 +29,7 @@
   <target name="rebuild" description="rebuilds this package"/>
 
   <!-- Prepare Target -->
-  <target name="prepare" depends="test">
-    <mkdir dir="doc/reports/phpunit/"/>
-    <mkdir dir="doc/reports/gcov/"/>
+  <target name="prepare">
     <mkdir dir="doc/reports/phpdoc"/>
     <mkdir dir="doc/apidoc"/>
   </target>
@@ -49,7 +49,7 @@
   </target>
 
   <!-- Report Target -->
-  <target name="report">
+  <target name="report" depends="report-prepare">
     <phpunit>
       <batchtest>
         <fileset refid="unit-tests"/>
@@ -63,23 +63,33 @@
                    format="frames"
                    todir="doc/reports/phpunit"/>
   </target>
+  <target name="report-prepare">
+   <mkdir dir="doc/reports/phpunit/"/>
+  </target>
 
   <!-- Code Coverage Target -->
-  <target name="gcov">
-   <coverage-setup database="doc/reports/gcov/database">
-    <fileset refid="php-libs"/>
+  <target name="gcov" depends="gcov-prepare">
+   <coverage-setup database="./doc/reports/gcov/database"
+   		   classpath="lib">
+    <fileset refid="php-libs"/> 
    </coverage-setup>
 
-   <phpunit codecoverage="true" printsummary="true">
+   <phpunit codecoverage="true">
     <batchtest>
      <fileset refid="unit-tests"/>
     </batchtest>
    </phpunit>
 
-   <coverage-report outfile="doc/reports/gcov/coverage.xml">
+   <coverage-report outfile="./doc/reports/gcov/coverage.xml">
     <report styledir="/home/hairmare/dev/php/phing/etc"
-              todir="doc/reports/gcov/"/>
+            todir="./doc/reports/gcov/"/>
    </coverage-report>
+  </target>
+  <target name="gcov-prepare">
+   <mkdir dir="doc/reports/gcov/"/>
+  </target>
+  <target name="gcov-clean">
+   <delete dir="doc/reports/gcov/"/>
   </target>
 
   <!-- API Doc Target -->
