@@ -48,13 +48,13 @@ class Config_PartyCal extends Zend_Config {
 	 * @throws Config_Exception_PartyCal
 	 *
 	 * @param $node String needed node
-	 * @param $mode Long mode for error handling
+	 * @param $mode Long mode for error handling, Exceptions are default
 	 *
 	 * @todo implement Exception/sdterr handling
 	 */
-	public function __construct( $node , $mode )
+	public function __construct( $node , $mode = NULL)
 	{
-		parent::__construct( new Zend_Config_Ini( $_ENV['PARTYCAL_CONFIG'], $node ) );
+		parent::__construct( new Zend_Config_Ini( $_ENV['PARTYCAL_CONFIG'] , $node ) );
 
 		$config_validator = new Config_Validator_PartyCal ( $_ENV['PARTYCAL_CONFIG'] );
 		try {

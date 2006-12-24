@@ -14,6 +14,9 @@
  * @todo implement Provider_Petzi_Config_Validator_Node_PartyCal
  */
 
+/**
+ * Config Validation Class
+ */
 class Config_Validator_PartyCal {
 
 	/**
@@ -36,7 +39,6 @@ class Config_Validator_PartyCal {
 	public function validate()
 	{
 	}
-
 }
 
 ?>

@@ -15,6 +15,6 @@ require_once 'ArrayObject/Listing.php';
 /**
  *
  */
-class ArrayObject_Provider_PartyCal extends ArrayObject_Listing_PartyCal { }
+class Listing_Provider_PartyCal extends ArrayObject_Listing_PartyCal { }
 
 ?>

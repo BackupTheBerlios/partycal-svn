@@ -2,53 +2,25 @@
 /**
  * Basic Controller for CLI Interaction.
  *
- * Released under the GNU GPL
- * Lucas S. Bickel 2006
+ * @copyright Released under the GNU GPL, see LICENSE for more Information
+ * @author Lucas S. Bickel 
+ * @package core
  */
+
+/**
+ * Abstract Controller.
+ */
+require_once 'PartyCalCore.php';
 
 /**
  * The main class for CLI based usage of PartyCal.
  */
-class PartyCal {
+class PartyCal extends PartyCalCore{
 
-	public $conf;
-	public $pdo;
-	public $providers;
-	public $subscribers;
-
-	public function __construct( $mode , $argv ) {
-
-		$this->argv = $argv;
-		$this->conf = new Config_PartyCal( $mode );
-
-		$this->pdo = new PDO( $this->conf->db_dso , null, null,
-		     array(PDO::ATTR_PERSISTENT => true));
-		$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-		$this->providers = new ProviderArray_PartyCal ( $this->conf->getProviderListing() );
-		$this->subscribers = new SubscriberArray_PartyCal ( $this->conf->getSubscriberListing() );
-	}
-
-	public function main() {
-
-		switch( $this->argv[1] ) {
-			case NULL:
-			case '-h':
-			case '--help':
-				$this->actionhelp();
-				break;
-			default:
-				$func = 'action'.$this->argv[1];
-				$this->$func();
-		}
-	}
-
-	public $helpString = 'basic client for viewing data in db and config';
-	public function actionhelp() {
-
-		echo __CLASS__.' -- '.$this->helpString."\n\n";
-		echo 'Usage: '.$this->argv[0].' [COMMAND] '."\n";
-		echo '       COMMAND: '.'i need code to dump this from class'."\n";
+	public function __construct( $mode , $argv ) 
+	{
+		$this->helpString = _('basic client for viewing data in db and config');
+		parent::__construct( $mode , $argv );
 	}
 
 	public function actionlistproviders() {

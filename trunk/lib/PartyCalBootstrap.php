@@ -3,7 +3,8 @@
  * Basic Bootstrap Configuration.
  * 
  * This script should get you running fast. You may coose to comment this 
- * out and do most of it in php.ini and .profile, just these rules:
+ * out and do most of it in php.ini and .profile, just follow these 
+ * guidelines:
  * 
  * PARTYCAL_CONFIG must be set in your env.
  * The following needs to get added to your include_path:
@@ -16,6 +17,10 @@
  * gets used here.
  *
  * Most users will just let this script make some informed guesses.
+ *
+ * @copyright Released under the GNU GPL, see LICENSE for more Information
+ * @author Lucas S. Bickel 
+ * @package core
  */
 
 if ( !isset( $_ENV['PARTYCAL_CONFIG'] ) ) {
@@ -53,7 +58,7 @@ $partycal_subscribers->close();
 
 ini_set( 'include_path' , ini_get('include_path') . ':'
 			. $_ENV['PARTYCAL_ROOT'] . '/lib:'
-		        . $_ENV['PARTYCAL_ROOT'] . '/lib/zf:' 
+		        . $_ENV['PARTYCAL_ROOT'] . '/opt/zf:' 
 			. $partycal_extensions );
 
 ?>

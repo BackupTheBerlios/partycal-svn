@@ -1,12 +1,14 @@
 <?php
 /**
  * PartyCal based Synchronization Suite.
+ *
+ * @copyright Released under the GNU GPL, see LICENSE for more Information
+ * @author Lucas S. Bickel 
+ * @package core
  */
+
 /**
  * The main class for syncing PartyCal.
- *
- * Released under the GNU GPL
- * Lucas S. Bickel 2006
  */
 class PartyCalSync extends PartyCal {
 
