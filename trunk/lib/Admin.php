@@ -13,7 +13,7 @@
  * Released under the GNU GPL
  * Lucas S. Bickel 2006
  */
-class PartyCalAdmin extends PartyCal {
+class Admin_PartyCal extends PartyCal {
 
 	/**
 	 * install tables into a newly created schema

@@ -15,12 +15,14 @@
  * Lucas S. Bickel 2006
  */
 
-define('PartyCal_MAIN_METHOD', 'PartyCalSync::main()');
+define('PartyCal_MAIN_METHOD', 'Sync_PartyCal::main()');
 
 require_once dirname(__FILE__).'/partycal';
 
-if (PartyCal_MAIN_METHOD == 'PartyCalSync::main()') {
-	$PartyCalSync = new PartyCalSync( 'partycal-sync', $argv );
+require_once $_ENV['PARTYCAL_ROOT'] . '/lib/Sync.php';
+
+if (PartyCal_MAIN_METHOD == 'Sync_PartyCal::main()') {
+	$PartyCalSync = new Sync_PartyCal( 'partycal-sync', $argv );
 	$PartyCalSync->main();
 }
 ?>
