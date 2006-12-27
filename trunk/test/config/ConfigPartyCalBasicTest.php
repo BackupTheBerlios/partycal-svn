@@ -3,7 +3,7 @@
 require_once 'PHPUnit/Framework.php';
 
 $_ENV['PARTYCAL_ROOT'] = '.';
-require_once 'lib/PartyCalBootstrap.php';
+require_once 'lib/Bootstrap.php';
 require_once 'lib/Config.php';
  
 class ConfigPartyCalBasicTest extends PHPUnit_Framework_TestCase
