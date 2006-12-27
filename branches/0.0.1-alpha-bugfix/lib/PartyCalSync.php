@@ -89,7 +89,7 @@ class PartyCalSync extends PartyCal {
 					// 23000 = duplicate record (ignore)
 					if (!$e->getCode() == 23000) {
 						throw new PDOExecption($e->getMessage(), $e->getCode());
-					}
+					} 
 				}
 			}
 
@@ -109,11 +109,10 @@ class PartyCalSync extends PartyCal {
 
 		$this->pdo->beginTransaction();
 		$stmt = $this->pdo->prepare('
-			SELECT * 
+			SELECT event.*, event_subscriber.event_subscriber_id
 			FROM event 
-			JOIN event_subscriber 
+			LEFT JOIN event_subscriber 
 			ON (event.event_id = event_subscriber.event_id)
-			WHERE event_subscriber.subscriber_name IS NULL
 		');
 
 		if ($stmt->execute()) {
@@ -121,6 +120,7 @@ class PartyCalSync extends PartyCal {
 
 			while ($row = $stmt->fetch()) {
 
+				if ($row['event_id'] === $row['event_subscriber_id']) continue;
 
 				$i = $this->subscribers->getIterator();
 
