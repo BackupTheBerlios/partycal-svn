@@ -27,29 +27,13 @@ require_once 'ArrayObject.php';
  *
  */
 class ArrayObject_Listing_PartyCal extends ArrayObject_PartyCal {
-
 	/**
-	 * .
+	 * Return an ArrayIterator by value.
 	 *
-	 * uses data from ini.
-	 *
-	 * @todo implement
+	 * @param String value to search for
+	 * @return ArrayIterator
 	 */
-	public function getActiveSubscriberIterator()
-	{
-	}
-
-	/**
-	 * .
-	 *
-	 * uses data from ini.
-	 *
-	 * @todo implement
-	 */
-	public function getInactiveSubscriberIterator()
-	{
-	}
-
+	function getIteratorByValue( $value ) {}
 }
 
 ?>
