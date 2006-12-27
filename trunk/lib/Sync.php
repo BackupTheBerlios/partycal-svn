@@ -10,7 +10,7 @@
 /**
  * The main class for syncing PartyCal.
  */
-class PartyCalSync extends PartyCal {
+class Sync_PartyCal extends PartyCal {
 
 	public $helpString = 'tool for syncinc db from and with remote providers and subscribers';
 
