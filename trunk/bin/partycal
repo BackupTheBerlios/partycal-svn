@@ -21,9 +21,10 @@ if ( !isset( $_ENV['PARTYCAL_ROOT'] ) ) {
 	$_ENV['PARTYCAL_ROOT'] = dirname(__FILE__).'/..';
 }
 
-require_once $_ENV['PARTYCAL_ROOT'].'/lib/PartyCalBootstrap.php';
+require_once $_ENV['PARTYCAL_ROOT'].'/lib/Bootstrap.php';
 
-require_once 'Config.php';
+// include_path is now set...
+require_once 'Core/PartyCal.php';
 
 function __autoload($classname) {
 	require_once $classname.'.php';

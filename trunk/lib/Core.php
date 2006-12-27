@@ -8,6 +8,11 @@
  */
 
 /**
+ * Config Parsing.
+ */
+require_once 'Config.php';
+
+/**
  * Provider Listing.
  */
 require_once 'ArrayObject/Listing/Provider.php';
@@ -22,7 +27,7 @@ require_once 'ArrayObject/Listing/Subscriber.php';
  *
  * @todo implement set action for reading and setting ini file settings
  */
-abstract class PartyCalCore {
+abstract class Core_PartyCal {
 	/**
 	 * @var Config_PartyCal Basic Configuration for the interface
 	 */
