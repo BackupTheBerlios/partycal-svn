@@ -10,12 +10,12 @@
 /**
  * Abstract Controller.
  */
-require_once 'PartyCalCore.php';
+require_once 'Core.php';
 
 /**
  * The main class for CLI based usage of PartyCal.
  */
-class PartyCal extends PartyCalCore{
+class PartyCal extends Core_PartyCal {
 
 	public function __construct( $mode , $argv ) 
 	{
