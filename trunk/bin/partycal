@@ -24,11 +24,7 @@ if ( !isset( $_ENV['PARTYCAL_ROOT'] ) ) {
 require_once $_ENV['PARTYCAL_ROOT'].'/lib/Bootstrap.php';
 
 // include_path is now set...
-require_once 'Core/PartyCal.php';
-
-function __autoload($classname) {
-	require_once $classname.'.php';
-}
+require_once 'PartyCal.php';
 
 if (PartyCal_MAIN_METHOD == 'PartyCal::main()') {
 	$PartyCal = new PartyCal( 'partycal-cli', $argv );
