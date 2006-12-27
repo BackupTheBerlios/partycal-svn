@@ -57,11 +57,11 @@ class Config_Validator_PartyCal {
 
 		$this->registerCoreValidators();
 
-		if ( $scan ) {
+		if ( $flag == CONFIG_VALIDATOR_PARTYCAL_MODE_SCAN ) {
 			$this->loadValidatorsByDir( $this->validatorscandirs );
 		}
 
-		$this->append($validators);
+		$this->append( $validators );
 	}
 
 	/**
@@ -93,13 +93,13 @@ class Config_Validator_PartyCal {
 	 *
 	 * @todo implement support for dynamic loading/registering validators like Provider_Petzi_Config_Validator_Node_PartyCal
 	 */
-	public function loadValidatorsByDir( Array $scandirs )
+	public function loadValidatorsByDir( $scandirs )
 	{
 	}
 
-	public function append($validators)
+	public function append( $validators )
 	{
-		if ( is_string($validators) ) {
+		if ( is_string( $validators ) ) {
 			$validators = array ( $validators );
 		}
 
@@ -110,8 +110,12 @@ class Config_Validator_PartyCal {
 		}
 	}
 
-	public function prepend($validators)
+	public function prepend( $validators )
 	{
+		if ( is_string( $validators ) ) {
+			$validators = array ( $validators );
+		}
+
 		if ( !empty( $this->validatorchain ) ) {
 			$this->validatorchain = array_merge( $validators , $this->validatorchain );
 		} else {

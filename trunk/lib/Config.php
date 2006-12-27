@@ -98,8 +98,11 @@ class Config_PartyCal extends Zend_Config {
 
 	/**
 	 * expose internal _data Array
-	 *
+	 * 
 	 * @return Array (array) cast of $this->_data
+	 *
+	 * @todo refactor callers, remove function
+	 * @deprecated pass around Config Objects instead of using this.
 	 */
 	public function getData()
 	{
