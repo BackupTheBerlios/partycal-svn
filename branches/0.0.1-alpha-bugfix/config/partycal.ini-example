@@ -1,0 +1,36 @@
+; config for cli interface
+[partycal-cli]
+db_dso=sqlite:data/sqlite.db
+
+; config for cil admin interface
+[partycal-cli-admin]
+db_dso=sqlite:data/sqlite.db
+
+; config for cron job
+[partycal-sync]
+db_dso=sqlite:data/sqlite.db
+
+; add providers here
+[provider-listing]
+petzi=http://feeds.petzi.ch/newevents_en.rdf
+
+; each provider gets entry like the following
+[provider-petzi]
+classname=Feed_Petzi_PartyCal
+
+; add subscribers here
+[subscriber-listing]
+googlecal=http://www.google.com/calendar/
+eventfulcal=http://evenful.com
+
+; each subscriber gets an entry here
+[subscriber-googlecal]
+classname=Service_Google_Calendar_PartyCal
+email=you@example.com
+passwd=yourPassword
+feed=http://www.google.com/calendar/feeds/public/full
+
+[subscriber-eventful]
+classname=Service_Eventful_PartyCal
+; you will need to get one of these for eventful
+api_key=someApiKey

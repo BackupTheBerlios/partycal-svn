@@ -1,0 +1,30 @@
+#!/usr/local/php-cvs/bin/php
+<?php
+/**
+ * PartyCal - a command line based application to discover new events from various sources and repost them to others.
+ *
+ * the goal is to read data from authorized services like club rss-feed or petzi.ch and write it into stuff like google 
+ * calendar, eventful or blogging software. the services supported will have to have an open api for such means.
+ *
+ * most of the setup can be found in the file config/partycal.ini. you need to register some providers and subscribers 
+ * there for this to make any sense. you can override the ini file location by setting the env-variable PARTYCAL_CONFIG
+ *
+ * partycal is based on php6 and zend framework, hack lib/PartyCalSetup.php or add the right stuff to php.ini.
+ * 
+ * Released under the GNU GPL
+ * Lucas S. Bickel 2006
+ */
+
+define('PartyCal_MAIN_METHOD', 'PartyCalAdmin::main()');
+
+require 'lib/PartyCalSetup.php';
+
+function __autoload($classname) {
+	require_once 'lib/'.$classname.'.php';
+}
+
+if (PartyCal_MAIN_METHOD == 'PartyCalAdmin::main()') {
+	$PartyCalAdmin = new PartyCalAdmin( 'partycal-cli-admin', $argv );
+	$PartyCalAdmin->main();
+}
+?>
