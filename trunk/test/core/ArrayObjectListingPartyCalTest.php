@@ -23,14 +23,14 @@ class ArrayObjectListingPartyCalTest extends ArrayObjectPartyCalTest
 		$i = $this->fixtures[1]->getIteratorByValue( 'active' );
 		$this->assertType( 'ArrayIterator' , $i );
 		while ( $i->valid() ) {
-			$this->assertEquals( 'activetest' , $i->value() );
+			$this->assertEquals( 'activetest' , $i->current() );
 			$i->next();
 		}
 
 		$j = $this->fixtures[1]->getIteratorByValue( 'inactive' );
 		$this->assertType( 'ArrayIterator' , $j );
 		while ( $i->valid() ) {
-			$this->assertEquals( 'inactivetest' , $j->value() );
+			$this->assertEquals( 'inactivetest' , $j->current() );
 			$i->next();
 		}
 	}
