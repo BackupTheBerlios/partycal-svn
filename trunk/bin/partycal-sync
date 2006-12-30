@@ -22,7 +22,7 @@ require_once dirname(__FILE__).'/partycal';
 require_once $_ENV['PARTYCAL_ROOT'] . '/lib/Sync.php';
 
 if (PartyCal_MAIN_METHOD == 'Sync_PartyCal::main()') {
-	$PartyCalSync = new Sync_PartyCal( 'partycal-sync', $argv );
+	$PartyCalSync = new Sync_PartyCal( $argv );
 	$PartyCalSync->main();
 }
 ?>

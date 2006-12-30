@@ -27,7 +27,7 @@ require_once $_ENV['PARTYCAL_ROOT'].'/lib/Bootstrap.php';
 require_once 'PartyCal.php';
 
 if (PartyCal_MAIN_METHOD == 'PartyCal::main()') {
-	$PartyCal = new PartyCal( 'partycal-cli', $argv );
+	$PartyCal = new PartyCal( $argv );
 	$PartyCal->main();
 }
 ?>

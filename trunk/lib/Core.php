@@ -5,7 +5,14 @@
  * @copyright Released under the GNU GPL, see LICENSE for more Information
  * @author Lucas S. Bickel 
  * @package core
+ *
+ * @todo evaluate porting this to zend_controller, do it
  */
+
+/**
+ * Interface that gets implemented here.
+ */
+require_once 'Core/Interface/Controller.php';
 
 /**
  * Config Parsing.
@@ -25,9 +32,11 @@ require_once 'ArrayObject/Listing/Subscriber.php';
 /**
  * Abstract Action Controller Class.
  *
- * @todo implement set action for reading and setting ini file settings
+ * 
+ * This class is not defined abstract but should get used that way anyhow.
  */
-abstract class Core_PartyCal {
+class Core_PartyCal implements Core_Interface_Controller_PartyCal {
+
 	/**
 	 * @var Config_PartyCal Basic Configuration for the interface
 	 */
@@ -59,26 +68,46 @@ abstract class Core_PartyCal {
 	 * the idea is to not read anything from the db yet,
 	 * all setup comes from files.
 	 *
-	 * @param $mode String
+	 * All params except $argv are optional. This is mainly so for unit-testing with Mock Objects.
+	 * It also makes it easy to override any given part of partycal with your own libs.
+	 *
 	 * @param $argv Array
+	 * @param $config Config_PartyCal Object
+	 * @param $listings Array containing Listing_PartyCal Objects in [providers] and [subscribers]
+	 * @param $pdo PDO Connection Object
+	 * @param $config_node String only gets used when $config is null
 	 */
-	public function __construct( $mode , $argv ) {
+	public function __construct( $argv , $config = NULL , $listings = NULL , $pdo = NULL , $config_node = 'partycal' ) {
 
 		$this->argv = $argv;
-		$this->conf = new Config_PartyCal( $mode , 'partycal' );
 
-		$this->providers = new Listing_Provider_PartyCal ( $this->conf->getProviderListing() );
-		$this->subscribers = new Listing_Subscriber_PartyCal ( $this->conf->getSubscriberListing() );
+		if ( empty( $config ) ) {
+			$this->conf = new Config_PartyCal( $config_node , 'partycal' );
+		} else {
+			$this->conf = $config;
+		}
 
-		$this->pdo = new PDO( $this->conf->db_dso , null, null,
-		     array(PDO::ATTR_PERSISTENT => true));
-		$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		if ( empty( $listings ) ) {
+			$this->providers   = new Listing_Provider_PartyCal ( $this->conf->getProviderListing() );
+			$this->subscribers = new Listing_Subscriber_PartyCal ( $this->conf->getSubscriberListing() );
+		} else {
+			$this->providers   = $listings['providers'];
+			$this->subscribers = $listings['subscribers'];
+		}
+
+		if ( empty( $pdo ) ) {
+			$this->pdo = new PDO( $this->conf->db_dso , null, null,
+			     array(PDO::ATTR_PERSISTENT => true));
+			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		} else {
+			$this->pdo = $pdo;
+		}
 	}
 
 	/**
 	 * Main Program Startingpoint.
 	 *
-	 * We parse the first argument in $this->argv and use it to decide what to do.
+	 * We parse the first argument in $this->argv and use it to decide which action to call.
 	 */
 	public function main() {
 
@@ -104,11 +133,11 @@ abstract class Core_PartyCal {
 	 *
 	 * Display help content.
 	 */
-	public function actionhelp() {
+	public function actionHelp() {
 
-		echo __CLASS__.' -- '.$this->helpString."\n\n";
-		echo 'Usage: '.$this->argv[0].' [COMMAND] '."\n";
-		echo '       COMMAND: '.'i need code to dump this from class'."\n";
+		$s = 'Usage: '.$this->argv[0].' [command] [subcommand]'."\n\n"
+		   . 'help: output global help (this) or subcommand help'."\n";
+		file_put_contents( 'php://output' , $s );
 	}
 }
 ?>

@@ -56,7 +56,7 @@ class Config_PartyCal extends Zend_Config {
 	{
 		parent::__construct( new Zend_Config_Ini( $_ENV['PARTYCAL_CONFIG'] , $node ) );
 
-		$config_validator = new Config_Validator_PartyCal ( $_ENV['PARTYCAL_CONFIG'] );
+		$config_validator = new Config_Validator_PartyCal ( $_ENV['PARTYCAL_CONFIG'] , CONFIG_VALIDATOR_PARTYCAL_MODE_SCAN );
 		try {
 			$config_validator->validate();
 		} catch (Exception $e) {

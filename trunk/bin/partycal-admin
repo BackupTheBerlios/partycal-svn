@@ -14,7 +14,7 @@ require_once  dirname(__FILE__).'/partycal';
 require_once $_ENV['PARTYCAL_ROOT'] . '/lib/Admin.php';
 
 if (PartyCal_MAIN_METHOD == 'Admin_PartyCal::main()') {
-	$PartyCalAdmin = new Admin_PartyCal( 'partycal-cli-admin', $argv );
+	$PartyCalAdmin = new Admin_PartyCal( $argv );
 	$PartyCalAdmin->main();
 }
 ?>

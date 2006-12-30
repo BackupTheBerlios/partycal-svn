@@ -17,10 +17,10 @@ class ArrayObject_PartyCal extends ArrayObject {
 	 *
 	 * @param $array Array data for populating the array
 	 */
-	public function __construct( $array ) {
+	public function __construct( $array = array() ) {
 
-		parent::__construct( $array , 
-				     ArrayObject::ARRAY_AS_PROPS );
+		parent::__construct( $array 
+				   , ArrayObject::ARRAY_AS_PROPS );
 
 	}
 
@@ -41,6 +41,21 @@ class ArrayObject_PartyCal extends ArrayObject {
 		}
 
 		return $s;
+	}
+
+	function iterateWithCallback( $callback )
+	{
+		$r = new ArrayObject_PartyCal();
+		$i = $this->getIterator();
+
+		while( $i->valid() ) {
+
+			$r->append( call_user_func( $callback , $i->key() , $i->current() ) );
+
+			$i->next();
+		}
+
+		return $r;
 	}
 }
 

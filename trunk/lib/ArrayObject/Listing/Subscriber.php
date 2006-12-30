@@ -15,6 +15,17 @@ require_once 'ArrayObject/Listing.php';
 /**
  *
  */
-class Listing_Subscriber_PartyCal extends ArrayObject_Listing_PartyCal { }
+require_once 'ArrayIterator/Subscriber.php';
+
+/**
+ *
+ */
+class Listing_Subscriber_PartyCal extends ArrayObject_Listing_PartyCal {
+
+	public function getIterator( )
+	{
+		return new ArrayIterator_Subscriber_PartyCal( $this );
+	}
+}
 
 ?>

@@ -17,6 +17,21 @@
 /**
  *
  */
+require_once 'Config/Validator/CoreNode.php';
+
+/**
+ *
+ */
+require_once 'Config/Validator/SubscriberListingNode.php';
+
+/**
+ *
+ */
+require_once 'Config/Validator/ProviderListingNode.php';
+
+/**
+ *
+ */
 define('CONFIG_VALIDATOR_PARTYCAL_MODE_SCAN', 1);
 
 /**
@@ -51,76 +66,106 @@ class Config_Validator_PartyCal {
 	 * @param Array $validators Validators to load
 	 * @param Flag $flag more settings
 	 */
-	public function __construct( $config , $validators = NULL, $flag = 0 )
+	public function __construct( $config, $flag = 0 , $validators = NULL )
 	{
+		$this->validatorchain = new ArrayObject();
+
 		$this->config = $config;
 
 		$this->registerCoreValidators();
 
 		if ( $flag == CONFIG_VALIDATOR_PARTYCAL_MODE_SCAN ) {
-			$this->loadValidatorsByDir( $this->validatorscandirs );
+			$this->loadValidatorsByDirs( $this->validatorscandirs );
 		}
 
-		$this->append( $validators );
+		if ( is_string( $validators ) ) {
+			$this->append( $validators );
+		}
 	}
 
 	/**
+	 * Dispatch validation to registered validator classes.
 	 * 
 	 * @throws Config_Exception_PartyCal
-	 *
-	 * @todo call core node validators etc
-	 * @todo dispatch calls to registered node validators (name based binding on ini entry)
+	 * 
+	 * The Exception might get flaggable someday maybe.
 	 */
 	public function validate()
 	{
+		$i = $this->validatorchain->getIterator();
+
+		while ( $i->valid() ) {
+
+			$class = $i->current();
+
+			$v = new $class( $this );
+			$v->validate();
+
+			$i->next();
+		}
 	}
 
 	/**
 	 * Register the core Validators.
 	 *
 	 * Core validators get included manually at the top of this file.
-	 *
-	 * @todo implement
 	 */
 	public function registerCoreValidators()
 	{
+		$this->append('Config_Validator_CoreNode_PartyCal');
+		$this->append('Config_Validator_SubscriberListingNode_PartyCal');
+		$this->append('Config_Validator_ProviderListingNode_PartyCal');
 	}
 
 	/**
-	 * 
+	 * dynamically load and append validators to the validatorchain.
 	 *
-	 * @param Array $scandirs Dirs to scan for Config/Validator subdirectories
+	 * @param Array $scandirs Dirs to scan for Config/Validator subdirectories. 
 	 *
 	 * @todo implement support for dynamic loading/registering validators like Provider_Petzi_Config_Validator_Node_PartyCal
 	 */
-	public function loadValidatorsByDir( $scandirs )
+	public function loadValidatorsByDirs( $scandirs )
 	{
-	}
-
-	public function append( $validators )
-	{
-		if ( is_string( $validators ) ) {
-			$validators = array ( $validators );
-		}
-
-		if ( !empty( $this->validatorchain ) ) {
-			$this->validatorchain = array_merge( $this->validatorchain , $validators );
-		} else {
-			$this->validatorchain = $validators;
+		foreach ( $scandirs AS $dir ) {
+			$this->loadValidatorsByDir( $dir );
 		}
 	}
 
-	public function prepend( $validators )
+	public function loadValidatorsByDir( $dir )
 	{
-		if ( is_string( $validators ) ) {
-			$validators = array ( $validators );
-		}
+		$dir = new DirectoryIterator( $dir );
 
-		if ( !empty( $this->validatorchain ) ) {
-			$this->validatorchain = array_merge( $validators , $this->validatorchain );
-		} else {
-			$this->validatorchain = $validators;
+		while ( $dir->valid() ) {
+			if ( !$dir->isDot() && $dir->isDir() ) {
+
+				$validatorfile  = $dir->getPath() . '/' . $dir->current() . '/Validator.php';
+				$validatorclass = 'Config_Validator_' . $dir->current() . 'Node_PartyCal';
+				
+				$this->loadValidator( $validatorclass , $validatorfile );
+			}
+
+			$dir->next();
 		}
+	}
+
+	public function loadValidator( $validatorclass , $validatorfile ) {
+
+		$file = new SplFileInfo( $validatorfile );
+
+		if ( $file->isReadable() ) {
+echo $validatorclass , $validatorfile ."\n";
+
+			require_once $validatorfile;
+			$this->append( $validatorclass );
+		}
+	}
+
+	/**
+	 * Add a validator to the validatorchain
+	 */
+	public function append( $validator )
+	{
+		$this->validatorchain->append( $validator );
 	}
 }
 

@@ -14,23 +14,35 @@ require_once 'Core.php';
 
 /**
  * The main class for CLI based usage of PartyCal.
+ * 
+ * @todo implement actions for reading and setting ini file settings
  */
-class PartyCal extends Core_PartyCal {
+class PartyCal extends Core_PartyCal implements Core_Interface_Controller_PartyCal {
 
-	public function __construct( $mode , $argv ) 
+	public function __construct( $argv ) 
 	{
 		$this->helpString = _('basic client for viewing data in db and config');
-		parent::__construct( $mode , $argv );
+		parent::__construct(  $argv );
 	}
 
-	public function actionlistproviders() {
+	public function actionListProviders() {
 
-		echo $this->providers;
+		$callback = create_function('$k,$p' , '
+			return $p->name.": ".$p->description."\n";');
+
+		$list = $this->providers->iterateWithCallback( $callback );
+
+		file_put_contents( 'php://output' , $list->getArrayCopy() );
 	}
 
-	public function actionlistsubscribers() {
+	public function actionListSubscribers() {
 
-		echo $this->subscribers;
+		$callback = create_function('$k,$s' , '
+			return $s->name.": ".$s->description."\n";');
+
+		$list = $this->subscribers->iterateWithCallback( $callback );
+
+		file_put_contents( 'php://output' , $list->getArrayCopy() );
 	}
 
 	public function actiondump() {

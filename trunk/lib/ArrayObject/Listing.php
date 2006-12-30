@@ -33,7 +33,10 @@ class ArrayObject_Listing_PartyCal extends ArrayObject_PartyCal {
 	 * @param String value to search for
 	 * @return ArrayIterator
 	 */
-	function getIteratorByValue( $value ) {}
+	function getIteratorByValue( $value ) {
+		$o = new ArrayObject( array_keys( $this->getArrayCopy() , $value ) );
+		return $o->getIterator();
+	}
 }
 
 ?>
