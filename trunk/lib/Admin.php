@@ -40,6 +40,14 @@ class Admin_PartyCal extends PartyCal {
 				subscriber_name TEXT
 			)
 		');
+		$this->pdo->query('
+			CREATE TABLE IF NOT EXISTS event_raw (
+				event_raw_id INTEGER PRIMARY KEY,
+				event_id INTEGER,
+				raw_data TEXT,
+				last_update TEXT
+			)
+		');
 	}
 
 	public function actionaddsubscriber($mode)

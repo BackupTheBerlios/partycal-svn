@@ -8,6 +8,16 @@
  */
 
 /**
+ *
+ */
+require_once 'PartyCal.php';
+
+/**
+ *
+ */
+require_once 'Provider/Sync.php';
+
+/**
  * The main class for syncing PartyCal.
  */
 class Sync_PartyCal extends PartyCal {
@@ -58,45 +68,12 @@ class Sync_PartyCal extends PartyCal {
 	 * @todo the db schema here is not final, it needs serious refining for supporting more than 2 providers
 	 */
 	public function loadNewData() {
-
+		
 		$i = $this->providers->getIterator();
+		$s = new Provider_Sync_PartyCal( $this->pdo );
 
 		while($i->valid()) {
-			$conf = new Config_PartyCal( 'provider-'.$i->key() );
-			$classname = $conf->classname;
-			$feedreader = new $classname;
-			$feed = $feedreader->import($i->current());
-
-			$event_stmt = $this->pdo->prepare('
-				INSERT INTO event (
-					start_ts,
-					end_ts,
-					event_name,
-					shortdesc,
-					longdesc,
-					location,
-					link
-				) VALUES (
-					:start_ts,
-					:end_ts,
-					:event_name,
-					:shortdesc,
-					:longdesc,
-					:location,
-					:link
-				)
-			');
-
-			foreach ($feed as $item) {
-				try {
-					$event_stmt->execute($feedreader->getInsertData($item));
-				} catch ( PDOException $e ) {
-					// 23000 = duplicate record (ignore)
-					if (!$e->getCode() == 23000) {
-						throw new PDOExecption($e->getMessage(), $e->getCode());
-					}
-				}
-			}
+			$s->load( $i->current() );
 
 			$i->next();
 		}

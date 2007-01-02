@@ -11,13 +11,32 @@
 require_once 'Zend/Feed.php';
 
 /**
+ * Provider Feed Interface.
+ */
+require_once 'Provider/Feed/Interface.php';
+
+/**
  * reader for Petzi Feeds.
  *
  * this will get changed to an object composition
  */
-class Feed_Petzi_PartyCal extends Zend_Feed {
+class Feed_Petzi_PartyCal extends Zend_Feed implements Provider_Feed_Interface_PartyCal {
 
-	public function getInsertData(Zend_Feed_EntryRss $item) {
+	public function getLink( Zend_Feed_EntryRss $item ) {
+		return $item->link();
+	}
+
+	public function getUpdateData( Zend_Feed_EntryRss $item ) {
+		$r = array();
+		$r['raw_data'] = $item->saveXML();
+
+		$r['flags'] = array();
+		$r['flags']['cancelmsg'] = false;
+
+		return $r;
+	}
+
+	public function getInsertData( Zend_Feed_EntryRss $item ) {
 
 		$start_ts = $item->eventDate().'T'.$item->eventDoors().'+01:00';
 		$end_ts = $item->eventDate().'T24:00:00+01:00';
@@ -71,15 +90,17 @@ class Feed_Petzi_PartyCal extends Zend_Feed {
 
 		$location = $item->clubName().', '.$item->clubCanton().'-'.$item->clubPostalCode().' '.$item->clubCity().', CH';
 		
-		return array (
+		$r = array (
 			'start_ts' => $start_ts,
 			'end_ts' => $end_ts,
 			'event_name' => htmlspecialchars($item->eventTitle()),
 			'shortdesc' => $sDesc,
 			'longdesc' => $lDesc,
 			'location' => $location,
-			'link' => $item->link()
+			'link' => $item->link(),
+			'raw_data' => $item->saveXML()
 		);
+		return $r;
 	}
 
 }

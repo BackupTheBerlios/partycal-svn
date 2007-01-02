@@ -46,6 +46,7 @@ class PartyCal extends Core_PartyCal implements Core_Interface_Controller_PartyC
 	}
 
 	public function actiondump() {
+
 		$stmt = $this->pdo->prepare('SELECT COUNT(*) AS NUM FROM event');
 		if ($stmt->execute()) {
 			while ($row = $stmt->fetch()) {
@@ -58,6 +59,24 @@ class PartyCal extends Core_PartyCal implements Core_Interface_Controller_PartyC
 			while ($row = $stmt->fetch()) {
 				var_dump('NAME', $row['name']);
 				var_dump('SHORT', $row['shortdesc'], 'LONG', $row['longdesc']);
+			}
+		}
+		return;
+		$stmt = $this->pdo->prepare('
+                        SELECT
+                                raw_data
+                        FROM event_raw
+                        WHERE event_id = 1
+                        AND  last_update IN ( 
+                                SELECT MAX( last_update ) 
+                                FROM event_raw
+                                WHERE event_id = 1
+                        )
+		');
+
+		if ($stmt->execute()) {
+			while ($row = $stmt->fetch()) {
+				var_dump($row);
 			}
 		}
 	}
