@@ -4,6 +4,9 @@
  *
  * proof-of-concept subscriber
  * @todo rework as reference provider implementation
+ *
+ * @package Subscriber
+ * @subpackage GoogleCalendar
  */
 
 /**
@@ -28,27 +31,38 @@ require_once 'Zend/Http/Cookie.php';
 require_once 'Zend/Http/Client.php';
 
 /**
- * Main Provider Class for Google Calendar Data.
+ *
  */
-class Service_Google_Calendar_PartyCal {
+require_once 'Subscriber/Sync/UserSubscribe.php';
+
+/**
+ * Main Subscriber Class for Google Calendar Data.
+ */
+class GoogleCalendar_Subscribe_PartyCal extends Subscriber_Sync_UserSubscribe_PartyCal {
 
 	public $client;
 	public $cal;
 
-	public function __construct( $confkey , $uri ) 
+	public function __construct( $config ) 
 	{
-		$this->conf = new Config_PartyCal( $confkey );
-		$this->uri = $uri;
+		parent::__construct( $config );
+
+		$this->uri = $this->config->feed;
 
 		$this->makeAuthedClient();
 	}
 
 	public function makeAuthedClient() 
 	{
-		$this->client = Zend_Gdata_ClientLogin::getHttpClient( $this->conf->email ,
-								       $this->conf->passwd ,
+		$this->client = Zend_Gdata_ClientLogin::getHttpClient( $this->config->email ,
+								       $this->config->passwd ,
 								       'cl' );
 		$this->cal = new Zend_Gdata_Calendar( $this->client );
+	}
+
+	public function addNewRecord()
+	{
+	echo 'adding';
 	}
 
 	/**
@@ -79,7 +93,7 @@ class Service_Google_Calendar_PartyCal {
   <gd:visibility value="http://schemas.google.com/g/2005#event.public"/> 
   <gd:transparency value="http://schemas.google.com/g/2005#event.transparent"/>
 </entry>';
-		$this->cal->post( $xmlString , $this->conf->feed );
+		$this->cal->post( $xmlString , $this->config->feed );
 	}
 }
 

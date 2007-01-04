@@ -97,7 +97,7 @@
    <phpdoc title="PartyCal API Documentation" 
    	   programpath="/usr/lib/php5/bin/phpdoc"
    	   destdir="doc/apidoc" 
-	   sourcepath="lib" 
+	   sourcepath="lib,ext" 
 	   output="HTML:Smarty:PHP"/>
   </target>
 

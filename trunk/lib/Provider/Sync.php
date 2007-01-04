@@ -4,7 +4,8 @@
  *
  * @copyright Released under the GNU GPL, see LICENSE for more Information
  * @author Lucas S. Bickel 
- * @package core
+ * @package Core
+ * @subpackage Provider
  */
 
 /**
@@ -31,7 +32,8 @@ class Provider_Sync_PartyCal {
 		$conf = $provider->config;
 		$classname = $conf->classname;
 
-		require_once $classname . '.php';
+
+		require_once $conf->filename;
 		$feedreader = new $classname;
 		$feed = $feedreader->import( $provider->feed );
 
@@ -157,6 +159,13 @@ class Provider_Sync_PartyCal {
 		}
 	}
 
+	/**
+	 * Insert an Event into the DB.
+	 *
+	 * @param Array $data
+	 *
+	 * @todo rewire this to make sure subscribers can be added later and get old events (is this wanted?)
+	 */
 	public function insertEvent( &$data ) {
 
 		static $insert_event_stmt;

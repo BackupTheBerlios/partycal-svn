@@ -3,6 +3,9 @@
  * Provider integration for petzi.ch.
  *
  * consider this the main place for developing the providers api for now
+ *
+ * @package Provider
+ * @subpackage Petzi
  */
 
 /**
@@ -19,6 +22,8 @@ require_once 'Provider/Feed/Interface.php';
  * reader for Petzi Feeds.
  *
  * this will get changed to an object composition
+ *
+ * @subpackage Petzi
  */
 class Feed_Petzi_PartyCal extends Zend_Feed implements Provider_Feed_Interface_PartyCal {
 
@@ -36,9 +41,25 @@ class Feed_Petzi_PartyCal extends Zend_Feed implements Provider_Feed_Interface_P
 		return $r;
 	}
 
+
+	/**
+	 * Get data used for inserting into the DB.
+	 *
+	 * this cooks all data to whats needed by providers (all of them) later...
+	 *
+	 * for now the event end_ts is 00:00. some algorithms will be 
+	 * needed for the following todo
+	 * 
+	 * @todo do something about events that start between 23:00 and 6:00
+	 */
 	public function getInsertData( Zend_Feed_EntryRss $item ) {
 
-		$start_ts = $item->eventDate().'T'.$item->eventDoors().'+01:00';
+		if ($item->eventDoors() == '00:00:00') {
+			$start_ts = $item->eventDate().'T'.$item->eventTime().'+01:00';
+		} else {
+			$start_ts = $item->eventDate().'T'.$item->eventDoors().'+01:00';
+		}
+
 		$end_ts = $item->eventDate().'T24:00:00+01:00';
 /*
             <title>12.01.2007: Tight Finks &amp; Fuckadies (OX Kultur)</title>

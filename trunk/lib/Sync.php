@@ -4,7 +4,7 @@
  *
  * @copyright Released under the GNU GPL, see LICENSE for more Information
  * @author Lucas S. Bickel 
- * @package core
+ * @package Core
  */
 
 /**
@@ -16,6 +16,11 @@ require_once 'PartyCal.php';
  *
  */
 require_once 'Provider/Sync.php';
+
+/**
+ *
+ */
+require_once 'Subscriber/Sync.php';
 
 /**
  * The main class for syncing PartyCal.
@@ -85,19 +90,20 @@ class Sync_PartyCal extends PartyCal {
 	 * what has already been synced, gets stored in the db so we dont need any remote lookup facility, this is mostly hit and run
 	 * 
 	 * \todo move lots of this into array classes
-	 * \todo rewire this to make sure subscribers can be added later and get old events (is this wanted?)
 	 */
 	public function syncWithWebAccounts() {
+		$i = $this->subscribers->getIterator();
+		$s = new Subscriber_Sync_PartyCal( $this->pdo );
+
+		while($i->valid()) {
+			$s->addNewRecords( $i->current() );
+			$s->updateRecords( $i->current() );
+
+			$i->next();
+		}
+		return;
 
 		$this->pdo->beginTransaction();
-		$stmt = $this->pdo->prepare('
-			SELECT * 
-			FROM event 
-			JOIN event_subscriber 
-			ON (event.event_id = event_subscriber.event_id)
-			WHERE event_subscriber.subscriber_name IS NULL
-		');
-
 		if ($stmt->execute()) {
 			$sucessful_events = array();
 

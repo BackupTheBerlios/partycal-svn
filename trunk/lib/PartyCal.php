@@ -4,7 +4,7 @@
  *
  * @copyright Released under the GNU GPL, see LICENSE for more Information
  * @author Lucas S. Bickel 
- * @package core
+ * @package Core
  */
 
 /**
@@ -47,6 +47,7 @@ class PartyCal extends Core_PartyCal implements Core_Interface_Controller_PartyC
 
 	public function actiondump() {
 
+	if (false) {
 		$stmt = $this->pdo->prepare('SELECT COUNT(*) AS NUM FROM event');
 		if ($stmt->execute()) {
 			while ($row = $stmt->fetch()) {
@@ -62,17 +63,17 @@ class PartyCal extends Core_PartyCal implements Core_Interface_Controller_PartyC
 			}
 		}
 		return;
-		$stmt = $this->pdo->prepare('
-                        SELECT
-                                raw_data
-                        FROM event_raw
-                        WHERE event_id = 1
-                        AND  last_update IN ( 
-                                SELECT MAX( last_update ) 
-                                FROM event_raw
-                                WHERE event_id = 1
-                        )
-		');
+	}
+		$stmt = $this->pdo->prepare("
+                                SELECT event.event_id , event.link
+                                FROM event 
+                                LEFT JOIN event_subscriber 
+                                ON ( event.event_id = event_subscriber.event_id )
+                                WHERE event_subscriber.subscriber_name IS NULL 
+				OR event_subscriber.subscriber_name != 'partilender'
+
+
+		");
 
 		if ($stmt->execute()) {
 			while ($row = $stmt->fetch()) {

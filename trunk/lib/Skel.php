@@ -18,9 +18,9 @@
 /**
  *
  */
-class _PartyCal extends _PartyCal { 
+class Skel_PartyCal extends _PartyCal { 
 
-	public function ()
+	public function __construct()
 	{
 	}
 }
