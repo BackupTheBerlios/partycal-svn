@@ -125,6 +125,12 @@ class Provider_Sync_PartyCal {
 		}
 	}
 
+	/**
+	 * Looks for differences and generates flags.
+	 *
+	 * @param Array $data
+	 * @return Array flags for storeUpdateFlags()
+	 */
 	public function compareLastTwoEvents( $data )
 	{
 		static $select_last_two_raw_events_stmt;
@@ -136,6 +142,19 @@ class Provider_Sync_PartyCal {
 	public function storeUpdateFlags( $data , $flags )
 	{
 		static $insert_update_flags_stmt;
+		if ( empty( $insert_update_flags_stmt ) ) {
+			$insert_update_flags_stmt = $this->pdo->prepare('
+				INSERT INTO event_update (
+					event_id,
+					flag_name
+				) VALUES (
+					:event_id,
+					:flag_name
+				)
+			');
+		}
+
+		var_dump($data , $flags);
 	}
 
 	/**

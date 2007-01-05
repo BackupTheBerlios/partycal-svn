@@ -40,7 +40,7 @@ class Core_PartyCal implements Core_Interface_Controller_PartyCal {
 	/**
 	 * @var Config_PartyCal Basic Configuration for the interface
 	 */
-	public $conf;
+	public $config;
 
 	/**
 	 * @var PDO Database Connection Object
@@ -82,21 +82,21 @@ class Core_PartyCal implements Core_Interface_Controller_PartyCal {
 		$this->argv = $argv;
 
 		if ( empty( $config ) ) {
-			$this->conf = new Config_PartyCal( $config_node , 'partycal' );
+			$this->config = new Config_PartyCal( $config_node );
 		} else {
-			$this->conf = $config;
+			$this->config = $config;
 		}
 
 		if ( empty( $listings ) ) {
-			$this->providers   = new Listing_Provider_PartyCal ( $this->conf->getProviderListing() );
-			$this->subscribers = new Listing_Subscriber_PartyCal ( $this->conf->getSubscriberListing() );
+			$this->providers   = new Listing_Provider_PartyCal( new Config_PartyCal( 'provider-listing' ) );
+			$this->subscribers = new Listing_Subscriber_PartyCal( new Config_PartyCal( 'subscriber-listing' ) );
 		} else {
 			$this->providers   = $listings['providers'];
 			$this->subscribers = $listings['subscribers'];
 		}
 
 		if ( empty( $pdo ) ) {
-			$this->pdo = new PDO( $this->conf->db_dso , null, null,
+			$this->pdo = new PDO( $this->config->db_dso , null, null,
 			     array(PDO::ATTR_PERSISTENT => true));
 			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		} else {

@@ -34,7 +34,7 @@ define( 'CONFIG_PARTYCAL_MODE_EXCEPTIONS' , 1 );
 define( 'CONFIG_PARTYCAL_MODE_STDERR' , 2 );
 
 /**
- * Configuration Handler for PartyCal
+ * Config Object with added Validator Interface for PartyCal.
  *
  * @class
  */
@@ -53,8 +53,8 @@ class Config_PartyCal extends Zend_Config {
 	 *
 	 * @todo implement Exception/sdterr handling
 	 */
-	public function __construct( $node , $mode = NULL)
-	{
+	public function __construct( $node , $mode = NULL) {
+
 		parent::__construct( new Zend_Config_Ini( $_ENV['PARTYCAL_CONFIG'] , $node ) );
 
 		$config_validator = new Config_Validator_PartyCal ( $_ENV['PARTYCAL_CONFIG'] , CONFIG_VALIDATOR_PARTYCAL_MODE_SCAN );
@@ -70,8 +70,13 @@ class Config_PartyCal extends Zend_Config {
 	 * provider listing as an array
 	 *
 	 * @return Array subscriber listing
+	 * @deprecated see getData for info
 	 */
 	static function getProviderListing() {
+/*@@DEBUG*/
+		trigger_error(__FUNCTION__.' is deprecated see getData for info');
+/*DEBUG@@*/
+
 		return Config_PartyCal::getNodeListing( 'provider-listing' );
 	}
 
@@ -79,8 +84,13 @@ class Config_PartyCal extends Zend_Config {
 	 * provider listing as an array
 	 *
 	 * @return Array subscriber listing
+	 * @deprecated see getData for info
 	 */
 	static function getSubscriberListing() {
+/*@@DEBUG*/
+		trigger_error(__FUNCTION__.' is deprecated see getData for info');
+/*DEBUG@@*/
+
 		return Config_PartyCal::getNodeListing( 'subscriber-listing' );
 	}
 
@@ -89,9 +99,13 @@ class Config_PartyCal extends Zend_Config {
 	 *
 	 * @param $node String node name
 	 * @return Array
+	 * @deprecated see getData for info
 	 */
-	static function getNodeListing( $node )
-	{
+	static function getNodeListing( $node )	{
+/*@@DEBUG*/
+		trigger_error(__FUNCTION__.' is deprecated see getData for info');
+/*DEBUG@@*/
+
 		$n = new Config_PartyCal( $node );
 
 		return $n->getData();
@@ -100,15 +114,21 @@ class Config_PartyCal extends Zend_Config {
 	/**
 	 * expose internal _data Array
 	 * 
-	 * @return Array (array) cast of $this->_data
-	 *
-	 * @todo refactor callers, remove function
-	 * @deprecated pass around Config Objects instead of using this.
+	 * @return Array
 	 */
-	public function getData()
-	{
-		return (array) $this->_data;
+	public function getArrayCopy() {
+
+		$r = array();
+		foreach ( $this AS $k => $v ) {
+			$r[$k] = $v;
+		}
+		return $r;
 	}
+
+	/**
+	 * @obsolete use getArrayCopy
+	 */
+	public function getData() { return $this->getArrayCopy(); }
 }
 
 ?>

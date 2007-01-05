@@ -28,6 +28,15 @@ require_once 'ArrayObject.php';
  *
  */
 class ArrayObject_Listing_PartyCal extends ArrayObject_PartyCal {
+
+	/**
+	 *
+	 */
+	public function __construct( Config_PartyCal $config ) {
+
+		parent::__construct( $config->getArrayCopy() );
+	}
+
 	/**
 	 * Return an ArrayIterator by value.
 	 *
@@ -35,6 +44,7 @@ class ArrayObject_Listing_PartyCal extends ArrayObject_PartyCal {
 	 * @return ArrayIterator
 	 */
 	function getIteratorByValue( $value ) {
+
 		$o = new ArrayObject( array_keys( $this->getArrayCopy() , $value ) );
 		return $o->getIterator();
 	}
