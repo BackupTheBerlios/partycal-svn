@@ -6,7 +6,11 @@ class Feed_Petzi_PartyCal extends Zend_Feed {
 
 	public function getInsertData(Zend_Feed_EntryRss $item) {
 
-		$start_ts = $item->eventDate().'T'.$item->eventDoors().'+01:00';
+		if ($item->eventDoors() == '00:00:00') {
+			 $start_ts = $item->eventDate().'T'.$item->eventTime().'+01:00';
+		} else {
+			$start_ts = $item->eventDate().'T'.$item->eventDoors().'+01:00';
+		}
 		$end_ts = $item->eventDate().'T24:00:00+01:00';
 /*
             <title>12.01.2007: Tight Finks &amp; Fuckadies (OX Kultur)</title>
