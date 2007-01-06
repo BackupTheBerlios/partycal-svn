@@ -52,8 +52,10 @@ class Config_Validator_PartyCal {
 
 	/**
 	 * @var Array Dirs to scan in loadValidatorsByDir.
+	 *
+	 * @todo set this up in a more stable fashion from bootstrap
 	 */
-	public $validatorscandirs = array( 'ext/providers/' , 'ext/subscribers' );
+	public $validatorscandirs = array( 'lib/ext/providers/' , 'lib/ext/subscribers' );
 
 	/**
 	 * Store config and load validators.

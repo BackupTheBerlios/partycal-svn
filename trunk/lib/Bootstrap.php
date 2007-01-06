@@ -28,7 +28,7 @@ if ( !isset( $_ENV['PARTYCAL_CONFIG'] ) ) {
 }
 
 $partycal_extensions = '';
-$partycal_providers = dir( $_ENV['PARTYCAL_ROOT'] . '/ext/providers' );
+$partycal_providers = dir( $_ENV['PARTYCAL_ROOT'] . '/lib/ext/providers' );
 while ( ( $partycal_provider_item = $partycal_providers->read()) !== false ) {
 
 	if ( ( $partycal_provider_item == '.' )
@@ -37,12 +37,12 @@ while ( ( $partycal_provider_item = $partycal_providers->read()) !== false ) {
 	continue;
 
 	$partycal_extensions .= $_ENV['PARTYCAL_ROOT'] 
-			     . '/ext/providers/'
+			     . '/lib/ext/providers/'
 			     . $partycal_provider_item . ':';
 }
 $partycal_providers->close();
 
-$partycal_subscribers = dir( $_ENV['PARTYCAL_ROOT'] . '/ext/subscribers' );
+$partycal_subscribers = dir( $_ENV['PARTYCAL_ROOT'] . '/lib/ext/subscribers' );
 while ( ( $partycal_subscriber_item = $partycal_subscribers->read() ) !== false ) {
 
 	if ( ( $partycal_subscriber_item == '.' )
@@ -51,7 +51,7 @@ while ( ( $partycal_subscriber_item = $partycal_subscribers->read() ) !== false 
 	continue;
 
 	$partycal_extensions .= $_ENV['PARTYCAL_ROOT'] 
-			     . '/ext/providers/'
+			     . '/lib/ext/providers/'
 			     . $partycal_subscriber_item . ':';
 }
 $partycal_subscribers->close();

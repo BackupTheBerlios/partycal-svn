@@ -60,40 +60,76 @@ class GoogleCalendar_Subscribe_PartyCal extends Subscriber_Sync_UserSubscribe_Pa
 		$this->cal = new Zend_Gdata_Calendar( $this->client );
 	}
 
-	public function addNewRecord()
-	{
-	echo 'adding';
-	}
-
 	/**
 	 *
-	 * @todo the xml generation part (hehe) must get changes soon
+	 * 
+	 *
+	 * @todo remove partycal specific code and but it somwhere generic in the loading phase
 	 */
-	public function createOrUpdate($item)
+	public function insertNewRecord( $item )
 	{
-		$xmlString = '<entry xmlns="http://www.w3.org/2005/Atom"
-    xmlns:gd="http://schemas.google.com/g/2005">
-  <category scheme="http://schemas.google.com/g/2005#kind" term="http://schemas.google.com/g/2005#event"/>
-  <title type="text">'.$item['event_name'].'</title>
-  <link rel="http://schemas.google.com/g/2005#onlineLocation" type="text/html" href="'.htmlspecialchars($item['link']).'"/>
-<!--  <link rel="http://schemas.google.com/g/2005#image type="image/jpg" href="http://petzi.ch/images/logo_petzi.jpg"/>-->
-  <content type="text">'.$item['shortdesc'].'
-  -- 
-  this event was posted by the Swiss Party Calendar Synchronizer
-  http://partycal.wordpress.com/ 
-  </content>
-  <author>
-    <name>PartyCal</name>
-    <email>'.$this->conf->email.'</email>
-  </author>
-  <gd:where valueString="'.$item['location'].'"></gd:where>
-  <gd:when startTime="'.$item['start_ts'].'"
-    endTime="'.$item['end_ts'].'"></gd:when>
-  <gd:eventStatus value="http://schemas.google.com/g/2005#event.confirmed"/>
-  <gd:visibility value="http://schemas.google.com/g/2005#event.public"/> 
-  <gd:transparency value="http://schemas.google.com/g/2005#event.transparent"/>
-</entry>';
-		$this->cal->post( $xmlString , $this->config->feed );
+		$d = new DOMDocument('1.0');
+
+		$d->appendChild($e = $d->createElementNS('http://www.w3.org/2005/Atom' , 'entry'));
+		$e->setAttribute('xmlns:gd', 'http://schemas.google.com/g/2005');
+
+		$e->appendChild($c = $d->createElement('category'));
+		$c->setAttribute('scheme' , 'http://schemas.google.com/g/2005#kind');
+		$c->setAttribute('term' , 'http://schemas.google.com/g/2005#event');
+
+		$e->appendChild($t = $d->createElement('title' , $item['event_name']));
+		$t->setAttribute('type' , 'text');
+
+		$e->appendChild($l = $d->createElement('link'));
+		$l->setAttribute('rel' , 'http://schemas.google.com/g/2005#onlineLocation');
+		$l->setAttribute('type' , 'text/html');
+		$l->setAttribute('href' , $item['link']);
+
+		$e->appendChild($l = $d->createElement('link'));
+		$l->setAttribute('rel' , 'http://schemas.google.com/g/2005#image');
+		$l->setAttribute('type' , 'image/jpg');
+		$l->setAttribute('href' , 'http://petzi.ch/images/logo_petzi.jpg');
+
+		$s  = $item['shortdesc']."\n";
+		$s .= '-- '."\n";
+		$s .= 'this event was posted by the Swiss Party Calendar Synchronizer'."\n";
+		$s .= 'http://partycal.wordpress.com/'."\n";
+
+		$e->appendChild($content = $d->createElement('content' , $s));
+		$content->setAttribute('type' , 'text/html');
+
+		$e->appendChild($a = $d->createElement('author'));
+		$a->appendChild( $d->createElement('name','PartyCal'));
+		$a->appendChild( $d->createElement('email',$this->config->email));
+
+		$e->appendChild($loc = $d->createElement('gd:where'));
+		$loc->setAttribute('valueString',$item['location']);
+
+		$e->appendChild($time = $d->createElement('gd:when'));
+		$time->setAttribute('startTime',$item['start_ts']);
+		$time->setAttribute('endTime',$item['end_ts']);
+
+		$e->appendChild($status = $d->createElement('gd:eventStatus'));
+		$status->setAttribute('value' , 'http://schemas.google.com/g/2005#event.confirmed');
+		$e->appendChild($v = $d->createElement('gd:visibility'));
+		$v->setAttribute('value' , 'http://schemas.google.com/g/2005#event.public');
+		$e->appendChild($tr = $d->createElement('gd:transparency'));
+		$tr->setAttribute('value' , 'http://schemas.google.com/g/2005#event.public');
+
+		try {
+			$this->cal->post( $d->saveXML() , $this->config->feed );
+		} catch (Zend_Gdata_Exception $e) {
+			return false;
+		}
+		return true;
+	}
+
+	public function addRecordComment()
+	{
+	}
+
+	public function cancelRecord()
+	{
 	}
 }
 

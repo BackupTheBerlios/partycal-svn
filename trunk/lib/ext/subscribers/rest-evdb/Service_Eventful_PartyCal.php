@@ -15,9 +15,12 @@ require_once 'Zend/Service/Rest.php';
  */
 class Service_Eventful_PartyCal {
 
-	public function __construct( $confkey , $uri ) {
+	public function __construct( $config ) {
 
-		$this->conf = new Config_PartyCal ( $confkey );
+		parent::__construct( $config );
+
+		$this->config = $config;
+		$this->uri = $this->config->feed;
 
 		$this->makeAuthedClient();
 	}
@@ -54,18 +57,45 @@ class Service_Eventful_PartyCal {
 			if ($s->isSuccessful()) {
 
 				// $user_key = ; get user key from $s->getBody();
-
 				$this->login_string .= '&user_key='.$user_key;
 			}
 
 		}
 	}
 
+	public function addNewRecord( $data )
+	{
+		if ( !$this->venueExists() && !$this->performerExists() ) {
 
-// find club id -> /search/venues/venue@id
-// http://api.evdb.com/rest/venues/search?app_key=wHsVzgXLc4GdQFcT&user=hairmare&password=lemmein&keywords=Dachstock&location=Bern+Switzerland
-// clubs will need to get added by hand, this should not be to hard. maybe reporting for missing clubs should be added.
+			$logger->inexistantVenueOrPerformerMsg();
 
+			return;
+
+		} else {
+			
 // insert event by means of zend rest
+			$this->insertEvent( $data );
+		}
+	}
 
+	public function venueExists()
+	{
+		// find club id -> /search/venues/venue@id
+		// uses mapping data in partycal.ini
+		// venue stuff is very manual... with good reporting thats no problem
+		// lots of subscribers will make me automaize this later on
+
+		// http://api.evdb.com/rest/venues/search?app_key=wHsVzgXLc4GdQFcT&user=hairmare&password=lemmein&keywords=Dachstock&location=Bern+Switzerland
+		// clubs will need to get added by hand, this should not be to hard. maybe reporting for missing clubs should be added.
+
+	}
+
+	public function performerExists()
+	{
+	}
+
+	public function insertEvent()
+	{
+	}
+}
 ?>

@@ -103,31 +103,6 @@ class Sync_PartyCal extends PartyCal {
 		}
 		return;
 
-		$this->pdo->beginTransaction();
-		if ($stmt->execute()) {
-			$sucessful_events = array();
-
-			while ($row = $stmt->fetch()) {
-
-
-				$i = $this->subscribers->getIterator();
-
-				while($i->valid()) {
-
-					$conf = new Config_PartyCal( 'subscriber-'.$i->key() );
-					$subscriberservice = new $conf->classname(  
-						'subscriber-'.$i->key(), 
-						$i->current() );
-					$subscriberservice->createOrUpdate( $row );
-
-					$i->next();
-				}
-
-				$sucessful_events[] .= $row['event_id'];
-			}
-		}
-
-
 		$i = $this->subscribers->getIterator();
 		$finish_stmt = $this->pdo->prepare('
 			INSERT INTO event_subscriber (

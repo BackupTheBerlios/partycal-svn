@@ -11,22 +11,32 @@
 /**
  *
  */
-
-/**
- *
- */
+require_once 'Log/Subscriber.php';
 
 /**
  *
  */
 class Subscriber_Sync_PartyCal { 
 
+	/**
+	 * 
+	 * - setup logging
+	 *
+	 * @param PDO $pdo SQLite Connection.
+	 */
 	public function __construct( $pdo ) {
 		
 		$this->pdo = $pdo;
+		$this->log = new Log_Subscriber_PartyCal();
 	}
 
-
+	/**
+	 * entry point for adding new records during the sync action.
+	 *
+	 * this gets called once per subscriber.
+	 *
+	 * @param Subscriber_PartyCal $subscriber wich subscriber to add records to
+	 */
 	public function addNewRecords( Subscriber_PartyCal $subscriber ) {
 
 		static $select_events_stmt;
@@ -42,28 +52,23 @@ class Subscriber_Sync_PartyCal {
 
 		while ( $row = $select_events_stmt->fetch() ) {
 
-			$this->addNewRecord( $row , $subscriber->name );
+			if ( $this->addNewRecord( $row , $subscriber ) ) {
+				$this->log->posted( $subscriber->name , $row['event_id'] );
+				$this->markAsAdded( $row['event_id'] , $subscriber );
+			}
 		}
 
 	}
 
-	public function addNewRecord( $data , $subscriber_name ) {
+	/**
+	 * load data for posting and delegate it to the subscriber implementation.
+	 *
+	 * @param PDO_Row $data from a simple select * in event
+	 * @param Subscriber_PartyCal $subscriber for delegating the action to
+	 */
+	public function addNewRecord( $data , Subscriber_PartyCal $subscriber ) {
 
-		static $check_event_for_provider_stmt;
-		if ( empty( $check_event_for_provider_stmt ) ) {
-			$check_event_for_provider_stmt = $this->pdo->prepare('
-				SELECT * FROM event_subscriber
-				WHERE event_id = :event_id
-				AND subscriber_name = :subscriber_name
-			');
-		}
-
-		$sel = array();
-		$sel['subscriber_name'] = $subscriber_name;
-		$sel['event_id'] = $data['event_id'];
-		$check_event_for_provider_stmt->execute( $sel );
-
-		if ( ! $check_event_for_provider_stmt->fetch() ) {
+		if ( $this->providerNeedsEvent( $data['event_id'] , $subscriber ) ) {
 
 			static $select_event_data_stmt;
 			if ( empty($select_event_data_stmt) ) {
@@ -79,21 +84,70 @@ class Subscriber_Sync_PartyCal {
 
 			if ($data = $select_event_data_stmt->fetch() ) {
 
-				$c = new Config_Partycal( 'subscriber-' . $subscriber_name );
-				$classname = $c->classname;
-
-				require_once $c->subscribe_filename;
-				if ( is_callable ( array ( $c->subscribe_classname , 'singleton' ) ) ) {
-					$o = call_user_func( array ( $c->subscribe_classname , 'singleton' ) , $c );
-				} else {
-					$o = new $c->subscribe_classname( $c );
-				}
-
-				return $o->addNewRecord( $data );
+				return $subscriber->delegate( 'insertNewRecord' , $data );
 			}
 		}
 	}
 
+	/**
+	 * Check if an event needs adding to a subscriber.
+	 *
+	 * @param $event_id
+	 * @param Subscriber_PartyCal $subscriber
+	 * @return boolean
+	 *
+	 * @todo consider delegating to subscriber so being able to check for existing records online.
+	 */
+	public function providerNeedsEvent( $event_id , Subscriber_PartyCal $subscriber ) {
+
+		static $check_event_for_provider_stmt;
+		if ( empty( $check_event_for_provider_stmt ) ) {
+			$check_event_for_provider_stmt = $this->pdo->prepare('
+				SELECT * FROM event_subscriber
+				WHERE event_id = :event_id
+				AND subscriber_name = :subscriber_name
+			');
+		}
+
+		$sel = array();
+		$sel['subscriber_name'] = $subscriber->name;
+		$sel['event_id'] = $event_id;
+		$check_event_for_provider_stmt->execute( $sel );
+
+		if ( $check_event_for_provider_stmt->fetch() ) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	public function markAsAdded( $event_id , Subscriber_PartyCal $subscriber ) {
+
+		static $insert_event_subscriber_stmt;
+		if ( empty( $insert_event_subscriber_stmt ) ) {
+			$insert_event_subscriber_stmt = $this->pdo->prepare('
+				INSERT INTO event_subscriber (
+					event_id,
+					subscriber_name
+				) VALUES (
+					:event_id,
+					:subscriber_name
+				)
+			');
+		}
+
+		$ins = array();
+		$ins['event_id'] = $event_id;
+		$ins['subscriber_name'] = $subscriber->name;
+
+		$insert_event_subscriber_stmt->execute( $ins );
+	}
+
+	/**
+	 * entry point for updating existing records during the sync action.
+	 *
+	 * @param Subscriber_PartyCal $subscriber
+	 */
 	public function updateRecords( Subscriber_PartyCal $subscriber ) {
 		return;
 		static $select_update_flags_by_provider_stmt;
