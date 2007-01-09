@@ -33,6 +33,9 @@ class Log_Subscriber_PartyCal extends Log_PartyCal {
 	public function posted( $subscriber , $event_id ) {
 	}
 
+	public function problem() {
+	}
+
 }
 
 ?>

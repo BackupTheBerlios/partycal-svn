@@ -55,6 +55,9 @@ class Subscriber_Sync_PartyCal {
 			if ( $this->addNewRecord( $row , $subscriber ) ) {
 				$this->log->posted( $subscriber->name , $row['event_id'] );
 				$this->markAsAdded( $row['event_id'] , $subscriber );
+				die( 'stop for finer grained debugging ' );
+			} else {
+				$this->log->problem( $row , $subscriber );
 			}
 		}
 

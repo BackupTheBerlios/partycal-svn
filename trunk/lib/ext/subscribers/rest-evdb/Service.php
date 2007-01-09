@@ -101,15 +101,18 @@ class Service_Eventful_PartyCal {
 		if ($s->isSuccessful()) {
 
 			$xml = new SimpleXMLElement($s->getBody());
-			$venue_id = $xml->venues->venue['id'];
 
-			$data['venue_id'] = $venue_id;
+			if ( $xml->total_items == 1 ) {
 
-			return true;
-		} else {
-			$this->log->missingVenue();
-			return false;
+				$venue_id = $xml->venues->venue['id'];
+				$data['venue_id'] = $venue_id;
+
+				return true;
+			}
 		}
+
+		$this->log->missingVenue();
+		return false;
 	}
 
 	/**
@@ -153,10 +156,8 @@ var_dump($s->getBody());
 			$this->insertEventLinks( $evdb_id , $data );
 			$this->insertTags( $evdb_id , $data );
 			$this->reindexEvent( $evdb_id );
-die('ok');
 			return true;
 		} else {
-die('nok');
 			return false;
 		}
 	}
