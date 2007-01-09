@@ -47,7 +47,7 @@ class PartyCal extends Core_PartyCal implements Core_Interface_Controller_PartyC
 
 	public function actiondump() {
 
-	if (false) {
+	if (true) {
 		$stmt = $this->pdo->prepare('SELECT COUNT(*) AS NUM FROM event');
 		if ($stmt->execute()) {
 			while ($row = $stmt->fetch()) {
@@ -60,6 +60,8 @@ class PartyCal extends Core_PartyCal implements Core_Interface_Controller_PartyC
 			while ($row = $stmt->fetch()) {
 				var_dump('NAME', $row['name']);
 				var_dump('SHORT', $row['shortdesc'], 'LONG', $row['longdesc']);
+				var_dump('LOC' , $row['location']);
+				var_dump('TAGS' , $row['style_tags']);
 			}
 		}
 		return;

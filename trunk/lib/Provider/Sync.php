@@ -11,14 +11,6 @@
 /**
  *
  */
-
-/**
- *
- */
-
-/**
- *
- */
 class Provider_Sync_PartyCal { 
 
 	public function __construct( $pdo ) {
@@ -27,8 +19,8 @@ class Provider_Sync_PartyCal {
 
 	}
 
-	public function load( $provider )
-	{
+	public function load( $provider ) {
+
 		$conf = $provider->config;
 		$classname = $conf->classname;
 
@@ -46,10 +38,39 @@ class Provider_Sync_PartyCal {
 				$this->updateRecord( $data );
 
 			} else {
-				$this->insertNewRecord( $feedreader->getInsertData( $item ) );
+
+				$data = $feedreader->getInsertData( $item );
+				$this->addGlobalData( $data );
+				$this->insertNewRecord( $data );
 			}
 
 		}
+	}
+	
+	/**
+	 * Adds data to every event processed by the system.
+	 *
+	 * @param Array $data
+	 * @return void
+	 *
+	 * @todo add support for templates in config/tpl
+	 */
+	public function addGlobalData( &$data ) {
+
+		$data['desc_text']         .= '-- ' . "\n"
+					   . 'This event was posted by the Swiss Party Calendar Synchronizer.' . "\n"
+					   . 'http://partycal.wordpress.com' . "\n";
+
+		$data['desc_text_nolinks'] .= '-- ' . "\n"
+					   . 'This event was posted by the Swiss Party Calendar Synchronizer.' . "\n";
+
+		$data['desc_html']         .= '<hr/>' . "\n"
+					   . '<p>This event was posted by <a href="http://partycal.wordpress.com">'
+					   . 'the Swiss Party Calendar Synchronizer</a>.' . "\n";
+
+		$data['desc_wiki']         .= '----' . "\n"
+					   . 'This event was posted by '
+					   . '[http://partycal.wordpress.com the Swiss Party Calendar Synchronizer].' . "\n";
 	}
 
 	/**
@@ -83,6 +104,7 @@ class Provider_Sync_PartyCal {
 	 * @todo rollback recoverables without exception
 	 */
 	public function updateRecord( $data ) {
+
 		if ( !$this->checkForUpdate( $data ) ) {
 			return;
 		}
@@ -139,6 +161,9 @@ class Provider_Sync_PartyCal {
 		return $f;
 	}
 
+	/**
+	 *
+	 */
 	public function storeUpdateFlags( $data , $flags )
 	{
 		static $insert_update_flags_stmt;
@@ -194,30 +219,51 @@ class Provider_Sync_PartyCal {
 					start_ts,
 					end_ts,
 					event_name,
-					shortdesc,
-					longdesc,
+					desc_text,
+					desc_text_nolinks,
+					desc_html,
+					desc_wiki,
+					venue_name,
+					venue_link,
+					city_name,
+					city_postal,
 					location,
-					link
+					link,
+					style_tags
 				) VALUES (
 					:start_ts,
 					:end_ts,
 					:event_name,
-					:shortdesc,
-					:longdesc,
+					:desc_text,
+					:desc_text_nolinks,
+					:desc_html,
+					:desc_wiki,
+					:venue_name,
+					:venue_link,
+					:city_name,
+					:city_postal,
 					:location,
-					:link
+					:link,
+					:style_tags
 				);
 			');
 		}
 
 		$ins = array();
-		$ins['start_ts']   = $data['start_ts'];
-		$ins['end_ts']     = $data['end_ts'];
-		$ins['event_name'] = $data['event_name'];
-		$ins['shortdesc']  = $data['shortdesc'];
-		$ins['longdesc']   = $data['longdesc'];
-		$ins['location']   = $data['location'];
-		$ins['link']       = $data['link'];
+		$ins['start_ts']          = $data['start_ts'];
+		$ins['end_ts']            = $data['end_ts'];
+		$ins['event_name']        = $data['event_name'];
+		$ins['desc_text']         = $data['desc_text'];
+		$ins['desc_text_nolinks'] = $data['desc_text_nolinks'];
+		$ins['desc_html']         = $data['desc_html'];
+		$ins['desc_wiki']         = $data['desc_wiki'];
+		$ins['venue_name']        = $data['venue_name'];
+		$ins['venue_link']        = $data['venue_link'];
+		$ins['city_name']         = $data['city_name'];
+		$ins['location']          = $data['location'];
+		$ins['location']          = $data['location'];
+		$ins['link']              = $data['link'];
+		$ins['style_tags']        = $data['style_tags'];
 
 		$insert_event_stmt->execute( $ins );
 

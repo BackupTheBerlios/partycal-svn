@@ -54,6 +54,33 @@ class Feed_Petzi_PartyCal extends Zend_Feed implements Provider_Feed_Interface_P
 	 */
 	public function getInsertData( Zend_Feed_EntryRss $item ) {
 
+/*
+	<item>
+            <title>23.02.2007: Brink Man Ship + Projet Bouvier (Ebullition)</title>
+            <link>http://tickets.petzi.ch/detail_evenement.php?new_lang=en&amp;id_evenement=5229</link>
+            <description />
+            <author>office@ebull.ch</author>
+            <category>Electro, Jazz</category>
+            <pubDate>Sun, 31 Dec 2006 22:02:14 +0100</pubDate>
+            <guid>http://tickets.petzi.ch/detail_evenement.php?new_lang=en&amp;id_evenement=5229</guid>
+        <petzi:eventTitle>Brink Man Ship + Projet Bouvier</petzi:eventTitle>
+        <petzi:eventDate>2007-02-23</petzi:eventDate>
+        <petzi:eventType>Electro, Jazz</petzi:eventType>
+        <petzi:eventTime>22:00:00</petzi:eventTime>
+        <petzi:eventDoors>22:00:00</petzi:eventDoors>
+        <petzi:eventPrice>18</petzi:eventPrice>
+        <petzi:eventPriceType>0</petzi:eventPriceType>
+        <petzi:eventHasAdvanceSale>1</petzi:eventHasAdvanceSale>
+        <petzi:clubName>Ebullition</petzi:clubName>
+        <petzi:clubStreet>Rue de Vevey 34</petzi:clubStreet>
+        <petzi:clubPostalCode>1630</petzi:clubPostalCode>
+        <petzi:clubCity>Bulle</petzi:clubCity>
+        <petzi:clubCanton>FR</petzi:clubCanton>
+        <petzi:clubPhone>026 913 90 33</petzi:clubPhone>
+        <petzi:clubWebsite>www.ebull.ch</petzi:clubWebsite>
+        <petzi:clubMail>office@ebull.ch</petzi:clubMail>
+        </item
+*/
 		if ($item->eventDoors() == '00:00:00') {
 			$start_ts = $item->eventDate().'T'.$item->eventTime().'+01:00';
 		} else {
@@ -61,64 +88,53 @@ class Feed_Petzi_PartyCal extends Zend_Feed implements Provider_Feed_Interface_P
 		}
 
 		$end_ts = $item->eventDate().'T24:00:00+01:00';
-/*
-            <title>12.01.2007: Tight Finks &amp; Fuckadies (OX Kultur)</title>
-            <link>http://tickets.petzi.ch/detail_evenement.php?new_lang=en&amp;id_evenement=5131</link>
-            <description />
-            <author>info@oxx.ch</author>
-            <category>Garage, Punk, Rock</category>
-            <pubDate>Wed, 13 Dec 2006 13:00:04 +0100</pubDate>
-            <guid>http://tickets.petzi.ch/detail_evenement.php?new_lang=en&amp;id_evenement=5131</guid>
-        <petzi:eventTitle>Tight Finks &amp; Fuckadies</petzi:eventTitle>
-        <petzi:eventDate>2007-01-12</petzi:eventDate>
-        <petzi:eventType>Garage, Punk, Rock</petzi:eventType>
-        <petzi:eventTime>22:00:00</petzi:eventTime>
-        <petzi:eventDoors>21:00:00</petzi:eventDoors>
-        <petzi:eventPrice>16</petzi:eventPrice>
-        <petzi:eventHasAdvanceSale>1</petzi:eventHasAdvanceSale>
-        <petzi:clubName>OX Kultur</petzi:clubName>
-        <petzi:clubStreet>Ochsengasse</petzi:clubStreet>
-        <petzi:clubPostalCode>4800</petzi:clubPostalCode>
-        <petzi:clubCity>Zofingen</petzi:clubCity>
-        <petzi:clubCanton>AG</petzi:clubCanton>
-        <petzi:clubPhone>062 751 93 74</petzi:clubPhone>
-        <petzi:clubWebsite>www.oxx.ch/</petzi:clubWebsite>
-        <petzi:clubMail>info@oxx.ch</petzi:clubMail>
-*/
-		$sDesc = ''.htmlspecialchars($item->eventTitle())."\n"
+
+		$desc_text = ''.htmlspecialchars($item->eventTitle())."\n"
 		       . 'Genre: '.htmlspecialchars($item->eventType())."\n"
 		       . 'Doors: '.$item->eventDoors()."\n"
 		       . 'Venue: '
 		       . htmlspecialchars($item->clubName())
 		       . ' ('.htmlspecialchars($item->clubWebsite).')'."\n\n"
 		       . 'Tickets or more Infos: '.htmlspecialchars($item->link())."\n\n";
-		/**
+		$desc_text .= 'Data source: http://www.petzi.ch '."\n";
+		$desc_text .= 'commercial use is prohibited - see http://tickets.petzi.ch/rss.php for license';
 
-		$lDesc = $sDesc
-		       . $item->clubStreet()."\n\n"
-		       . $item->clubPostalCode().' '.$item->clubCity()."\n\n";
 
-		if ($item->eventHasAdvanceSale() == 1) {
-			$petzilink = 'buy tickets: '.$item->link();
-		} else {
-			$petzilink = 'more infos: $item->link()';
-		}
-		*/
-		$petzilink .= 'Data source: http://www.petzi.ch '."\n";
-		$petzilink .= 'commercial use is prohibited - see http://tickets.petzi.ch/rss.php for license';
-		$lDesc .= $petzilink;
-		$sDesc .= $petzilink;
+		$desc_text_nolinks = htmlspecialchars( $item->eventTitle() )."\n"
+				   . 'Genre: '.htmlspecialchars($item->eventType())."\n"
+				   . 'Doors: '.$item->eventDoors()."\n"
+				   . 'Venue: '. htmlspecialchars($item->clubName()) . "\n\n";
+		$desc_text_nolinks .= 'Data source: petzi.ch '."\n";
+		$desc_text_nolinks .= 'commercial use is prohibited - see tickets.petzi.ch/rss.php for license';
 
-		$location = $item->clubName().', '.$item->clubCanton().'-'.$item->clubPostalCode().' '.$item->clubCity().', CH';
+		$desc_html = '<p><strong>' . htmlspecialchars( $item->eventTitle() ) . "</strong>\n"
+			   . '<p>Data source: <a href="http://www.petzi.ch"><img src="http://petzi.ch/images/logo_petzi.jpg"/></a>'
+			   . '<p>commercial use is prohibited - <a href="http://tickets.petzi.ch/rss.php">data license</a>';
+
+		$desc_wiki = '';
+
+
+		$venue_name = $item->clubName();
+		$city_name = $item->clubPostalCode().' '.$item->clubCity().', CH';
+		$location = $venue_name.', '.$city_name;
+		$style_tags = $item->category();
 		
 		$r = array (
 			'start_ts' => $start_ts,
 			'end_ts' => $end_ts,
 			'event_name' => htmlspecialchars($item->eventTitle()),
-			'shortdesc' => $sDesc,
-			'longdesc' => $lDesc,
+			'desc_text' => $desc_text,
+			'desc_text_nolinks' => $desc_text_nolinks,
+			'desc_html' => $desc_html,
+			'desc_wiki' => $desc_wiki,
+			'cost_text' => $cost_text,
+			'venue_name' => $venue_name,
+			'venue_link' => $venue_link,
+			'city_name' => $city_name,
+			'city_postal' => $city_postal,
 			'location' => $location,
 			'link' => $item->link(),
+			'style_tags' => $style_tags,
 			'raw_data' => $item->saveXML()
 		);
 		return $r;

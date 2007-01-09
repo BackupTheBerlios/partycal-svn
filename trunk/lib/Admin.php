@@ -26,10 +26,17 @@ class Admin_PartyCal extends PartyCal {
 				start_ts TEXT,
 				end_ts TEXT,
 				event_name TEXT,
-				shortdesc BLOB,
-				longdesc BLOB,
+				desc_text BLOB,
+				desc_text_nolinks BLOB,
+				desc_html BLOB,
+				desc_wiki BLOB,
+				venue_name TEXT,
+				venue_link TEXT,
+				city_name TEXT,
+				city_postal TEXT,
 				location TEXT,
-				link TEXT UNIQUE
+				link TEXT UNIQUE,
+				style_tags TEXT
 			)
 		');
 
