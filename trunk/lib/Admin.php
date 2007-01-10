@@ -57,6 +57,15 @@ class Admin_PartyCal extends PartyCal {
 		');
 	}
 
+	public function actionUpdate() {
+
+		// copy needed alpha data away (backup tables)
+		// drop old tables
+		// $this->actioninstallschema();
+		// restore data
+		// drop backup tables
+	}
+
 	public function actionaddsubscriber($mode)
 	{
 		return;

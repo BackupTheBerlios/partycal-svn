@@ -11,6 +11,11 @@
 require_once 'Zend/Service/Rest.php';
 
 /**
+ *
+ */
+require_once dirname(__FILE__) . '/Log.php';
+
+/**
  * Main eventful class
  */
 class Service_Eventful_PartyCal {
@@ -21,6 +26,8 @@ class Service_Eventful_PartyCal {
 
 		$this->config = $config;
 		$this->uri = $this->config->feed;
+
+		$this->logger = new Log_Eventful_PartyCal();
 
 		$this->makeAuthedClient();
 		$this->loadCategoryList();
@@ -73,13 +80,14 @@ class Service_Eventful_PartyCal {
 		return;
 	}
 
-	public function insertNewRecord( $data )
-	{
-		if ( !$this->venueExists( $data ) && !$this->performerExists( $data ) ) {
+	/**
+	 * @todo call performerExists
+	 */
+	public function insertNewRecord( $data ) {
 
-			$logger->inexistantVenueOrPerformerMsg();
+		if ( !$this->venueExists( $data ) ) {
 
-			return;
+			return false;
 
 		} else {
 			
@@ -90,8 +98,14 @@ class Service_Eventful_PartyCal {
 	/**
 	 *
 	 */
-	public function venueExists( &$data )
-	{
+	public function venueExists( &$data ) {
+
+		static $missing_venue_cache = array();
+
+		if ( $missing_venue_cache[ $data['city_name'] ][ $data['venue_name'] ] == true ) {
+			return false;
+		}
+
 		$rq = $this->login_string
 		    . '&keywords=' . urlencode($data['venue_name'])
 		    . '&location=' . urlencode($data['city_name']);
@@ -111,7 +125,9 @@ class Service_Eventful_PartyCal {
 			}
 		}
 
-		$this->log->missingVenue();
+		$this->logger->missingVenue( $data['venue_name'] , $data['city_name'] );
+		$missing_venue_cache[ $data['city_name'] ][ $data['venue_name'] ] = true;
+
 		return false;
 	}
 
@@ -125,6 +141,7 @@ class Service_Eventful_PartyCal {
 	}
 
 	/**
+	 *
 	 *
 	 */
 	public function insertEvent( $data ) {
@@ -155,6 +172,7 @@ var_dump($s->getBody());
 			$this->insertCategory( $evdb_id , $data );
 			$this->insertEventLinks( $evdb_id , $data );
 			$this->insertTags( $evdb_id , $data );
+			$this->insertImage( $evdb_id , $data );
 			$this->reindexEvent( $evdb_id );
 			return true;
 		} else {
@@ -232,6 +250,46 @@ var_dump($s->getBody());
 		$s = $this->rest->restGet( '/rest/events/categories/add' , $rq );
 		var_dump($s->getBody());
 		return $s->isSuccessful();
+	}
+
+	/**
+	 *
+	 * @todo implement provider_image
+	 */
+	public function insertImage( $evdb_id , $data ) {
+		
+		if ( empty( $data['provider_image'] ) ) {
+			$data['provider_image'] = 'http://petzi.ch/images/logo_petzi.jpg';
+			$data['provider_image_caption'] = 'petzi.ch';
+		}
+
+		$rq = $this->login_string
+		    . '&image_url=' . $data['provider_image']
+		    . '&caption=' . $data['provider_image_caption'];
+
+		$s = $this->rest->restGet( '/rest/images/new' , $rq );
+		if ($s->isSuccessful()) {
+			$xml = new SimpleXMLElement($s->getBody());
+
+			$image_id = $xml->id;
+
+			$rq = $this->login_string
+			    . '&id=' . $evdb_id
+			    . '&image_id=' . $image_id;
+
+			$s = $this->rest->restGet( '/rest/events/images/add' , $rq );
+			var_dump($s->getBody());
+			return $s->isSuccessful();
+		}
+
+		return false;
+	}
+
+	/**
+	 * @todo implement calendars (granularity?, needed?)
+	 */
+	public function addToCalendars( $evdb_id , $data ) {
+		//explode(',', $this->config['calendars'])
 	}
 
 	public function reindexEvent( $evdb_id ) {
