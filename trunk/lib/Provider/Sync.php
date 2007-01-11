@@ -57,7 +57,7 @@ class Provider_Sync_PartyCal {
 	 */
 	public function addGlobalData( &$data ) {
 
-		$data['desc_text']         .= '-- ' . "\n"
+		$data['desc_text']         .= "\n" . '-- ' . "\n"
 					   . 'This event was posted by the Swiss Party Calendar Synchronizer.' . "\n"
 					   . 'http://partycal.wordpress.com' . "\n";
 
