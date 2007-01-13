@@ -55,7 +55,7 @@ class Subscriber_Sync_PartyCal {
 			if ( $this->addNewRecord( $row , $subscriber ) ) {
 				$this->log->posted( $subscriber->name , $row['event_id'] );
 				$this->markAsAdded( $row['event_id'] , $subscriber );
-				die( 'stop for finer grained debugging ' );
+			//	die( 'stop for finer grained debugging ' );
 			} else {
 				$this->log->problem( $row , $subscriber );
 			}
@@ -150,6 +150,8 @@ class Subscriber_Sync_PartyCal {
 	 * entry point for updating existing records during the sync action.
 	 *
 	 * @param Subscriber_PartyCal $subscriber
+	 *
+	 * @todo implement update Function
 	 */
 	public function updateRecords( Subscriber_PartyCal $subscriber ) {
 		return;

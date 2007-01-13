@@ -223,6 +223,8 @@ class Provider_Sync_PartyCal {
 					desc_text_nolinks,
 					desc_html,
 					desc_wiki,
+					cost_text,
+					free,
 					venue_name,
 					venue_link,
 					city_name,
@@ -238,6 +240,8 @@ class Provider_Sync_PartyCal {
 					:desc_text_nolinks,
 					:desc_html,
 					:desc_wiki,
+					:cost_text,
+					:free,
 					:venue_name,
 					:venue_link,
 					:city_name,
@@ -257,6 +261,8 @@ class Provider_Sync_PartyCal {
 		$ins['desc_text_nolinks'] = $data['desc_text_nolinks'];
 		$ins['desc_html']         = $data['desc_html'];
 		$ins['desc_wiki']         = $data['desc_wiki'];
+		$ins['cost_text']         = $data['cost_text'];
+		$ins['free']              = $data['free'];
 		$ins['venue_name']        = $data['venue_name'];
 		$ins['venue_link']        = $data['venue_link'];
 		$ins['city_name']         = $data['city_name'];

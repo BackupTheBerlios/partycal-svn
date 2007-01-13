@@ -58,10 +58,11 @@ class PartyCal extends Core_PartyCal implements Core_Interface_Controller_PartyC
 		$stmt = $this->pdo->prepare('SELECT * FROM event');
 		if ($stmt->execute()) {
 			while ($row = $stmt->fetch()) {
-				var_dump('NAME', $row['name']);
-				var_dump('SHORT', $row['shortdesc'], 'LONG', $row['longdesc']);
+				var_dump('NAME', $row['event_name']);
+				var_dump('SHORT', $row['desc_text'], 'LONG', $row['desc_html']);
 				var_dump('LOC' , $row['location']);
 				var_dump('TAGS' , $row['style_tags']);
+				var_dump('COST', $row['free'], $row['cost_text']);
 			}
 		}
 		return;

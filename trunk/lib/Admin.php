@@ -30,6 +30,8 @@ class Admin_PartyCal extends PartyCal {
 				desc_text_nolinks BLOB,
 				desc_html BLOB,
 				desc_wiki BLOB,
+				cost_text TEXT,
+				free INTEGER,
 				venue_name TEXT,
 				venue_link TEXT,
 				city_name TEXT,

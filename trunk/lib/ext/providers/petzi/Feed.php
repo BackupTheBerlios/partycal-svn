@@ -55,31 +55,33 @@ class Feed_Petzi_PartyCal extends Zend_Feed implements Provider_Feed_Interface_P
 	public function getInsertData( Zend_Feed_EntryRss $item ) {
 
 /*
-	<item>
-            <title>23.02.2007: Brink Man Ship + Projet Bouvier (Ebullition)</title>
-            <link>http://tickets.petzi.ch/detail_evenement.php?new_lang=en&amp;id_evenement=5229</link>
-            <description />
-            <author>office@ebull.ch</author>
-            <category>Electro, Jazz</category>
-            <pubDate>Sun, 31 Dec 2006 22:02:14 +0100</pubDate>
-            <guid>http://tickets.petzi.ch/detail_evenement.php?new_lang=en&amp;id_evenement=5229</guid>
-        <petzi:eventTitle>Brink Man Ship + Projet Bouvier</petzi:eventTitle>
-        <petzi:eventDate>2007-02-23</petzi:eventDate>
-        <petzi:eventType>Electro, Jazz</petzi:eventType>
+        <item>
+            <title>16.02.2007: Landfall &amp; Pornolé (Kraftfeld)</title>
+            <link>http://tickets.petzi.ch/detail_evenement.php?new_lang=en&amp;id_evenement=5346</link>
+            <description></description>
+            <author>Info@kraftfeld.ch</author>
+            <category>Alternative</category>
+            <pubDate>Fri, 12 Jan 2007 16:44:06 +0100</pubDate>
+            <guid>http://tickets.petzi.ch/detail_evenement.php?new_lang=en&amp;id_evenement=5346</guid>
+        <petzi:eventTitle>Landfall &amp; Pornolé</petzi:eventTitle>
+        <petzi:eventDate>2007-02-16</petzi:eventDate>
+        <petzi:eventType>Alternative</petzi:eventType>
         <petzi:eventTime>22:00:00</petzi:eventTime>
-        <petzi:eventDoors>22:00:00</petzi:eventDoors>
-        <petzi:eventPrice>18</petzi:eventPrice>
+        <petzi:eventDoors>21:00:00</petzi:eventDoors>
+        <petzi:eventPrice>12</petzi:eventPrice>
         <petzi:eventPriceType>0</petzi:eventPriceType>
-        <petzi:eventHasAdvanceSale>1</petzi:eventHasAdvanceSale>
-        <petzi:clubName>Ebullition</petzi:clubName>
-        <petzi:clubStreet>Rue de Vevey 34</petzi:clubStreet>
-        <petzi:clubPostalCode>1630</petzi:clubPostalCode>
-        <petzi:clubCity>Bulle</petzi:clubCity>
-        <petzi:clubCanton>FR</petzi:clubCanton>
-        <petzi:clubPhone>026 913 90 33</petzi:clubPhone>
-        <petzi:clubWebsite>www.ebull.ch</petzi:clubWebsite>
-        <petzi:clubMail>office@ebull.ch</petzi:clubMail>
-        </item
+        <petzi:eventHasAdvanceSale>0</petzi:eventHasAdvanceSale>
+        <petzi:eventTicketsAvailable>0</petzi:eventTicketsAvailable>
+        <petzi:eventCanceled>0</petzi:eventCanceled>
+        <petzi:clubName>Kraftfeld</petzi:clubName>
+        <petzi:clubStreet>Lagerplatz 18</petzi:clubStreet>
+        <petzi:clubPostalCode>8400</petzi:clubPostalCode>
+        <petzi:clubCity>Winterthur</petzi:clubCity>
+        <petzi:clubCanton>ZH</petzi:clubCanton>
+        <petzi:clubPhone>052.202.02.04</petzi:clubPhone>
+        <petzi:clubWebsite>www.kraftfeld.ch</petzi:clubWebsite>
+        <petzi:clubMail>Info@kraftfeld.ch</petzi:clubMail>
+        </item>
 */
 		if ($item->eventDoors() == '00:00:00') {
 			$start_ts = $item->eventDate().'T'.$item->eventTime().'+01:00';
@@ -113,6 +115,12 @@ class Feed_Petzi_PartyCal extends Zend_Feed implements Provider_Feed_Interface_P
 
 		$desc_wiki = '';
 
+		$cost_text = $this->getCostText( $item );
+		if ( $item->eventPriceType() == 1 ) {
+			$free = 1;
+		} else {
+			$free = 0;
+		}
 
 		$venue_name = $item->clubName();
 		$city_name = $item->clubPostalCode().' '.$item->clubCity().', CH';
@@ -128,6 +136,7 @@ class Feed_Petzi_PartyCal extends Zend_Feed implements Provider_Feed_Interface_P
 			'desc_html' => $desc_html,
 			'desc_wiki' => $desc_wiki,
 			'cost_text' => $cost_text,
+			'free' => $free,
 			'venue_name' => $venue_name,
 			'venue_link' => $venue_link,
 			'city_name' => $city_name,
@@ -140,6 +149,28 @@ class Feed_Petzi_PartyCal extends Zend_Feed implements Provider_Feed_Interface_P
 		return $r;
 	}
 
+	public function getCostText( $item ) {
+
+		switch( $item->eventPriceType() ) {
+			case 0:
+				if ( $item->eventHasAdvanceSale() == 1 ) {
+					$p = $item->eventPrice() . ' CHF '
+					   . '(advance booking, box office pricing might be slightly different)';
+				} else {
+					$p = $item->eventPrice() . ' CHF '
+					    . '(box office)';
+				}
+				return $p;
+			break;
+			case 1: // free
+			case 2: // unknown
+				return '';
+			break;
+			case 3:
+				return 'free but donations requested';
+			break;
+		}
+	}
 }
 
 ?>
