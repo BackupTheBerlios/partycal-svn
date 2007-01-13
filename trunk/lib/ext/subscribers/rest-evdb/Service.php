@@ -4,7 +4,7 @@
  * 
  * @copyright Released under the GNU GPL, see LICENSE for more Information
  * @author Lucas S. Bickel 
- * @package subscriber
+ * @package Subscriber
  * @subpackage rest-evdb
  * @file
  */
@@ -111,11 +111,11 @@ class Service_Eventful_PartyCal {
 	public function insertNewRecord( $data ) {
 
 		if ( !$this->venueExists( $data ) ) {
-			$this->logger->missingVenue( $data['venue_name'] , $data['city_name'] );
+			$this->logger->missingVenue( $data['venue_name'] , $data['city_name'] , $data['venue_link'] );
 			return false;
 		}
 
-		if ( !$this->performerExists( $data ) {
+		if ( !$this->performerExists( $data ) ) {
 			$this->logger->missingPerformer();
 			return false;
 		}
@@ -189,7 +189,7 @@ class Service_Eventful_PartyCal {
 		    . '&stop_time' . $data['end_ts']
 		    . '&tz_olson_path=Europe/Zurich'
 		    . '&all_day=0'
-		    . '&privacy=2' //private
+		    . '&privacy=' . $this->config->post_privacy
 		    . '&description=' . urlencode( $data['desc_html'] )
 		    . '&tags=' . $data['tags']
 		    . '&free=' . $data['free']

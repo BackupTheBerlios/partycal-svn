@@ -4,8 +4,8 @@
  *
  * @copyright Released under the GNU GPL, see LICENSE for more Information
  * @author Lucas S. Bickel 
- * @package core
- * @subpackage subscriber
+ * @package Core
+ * @subpackage Subscriber
  * @file
  */
 
@@ -44,7 +44,8 @@ class Log_Subscriber_PartyCal extends Log_PartyCal {
 	 *
 	 * @return void
 	 */
-	public function problem() {
+	public function problem( $msg ) {
+		 $this->warn( '[Subscriber] ' . $msg );
 	}
 
 }

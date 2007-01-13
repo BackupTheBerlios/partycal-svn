@@ -125,6 +125,8 @@ class Feed_Petzi_PartyCal extends Zend_Feed implements Provider_Feed_Interface_P
 		$venue_name = $item->clubName();
 		$city_name = $item->clubPostalCode().' '.$item->clubCity().', CH';
 		$location = $venue_name.', '.$city_name;
+		$venue_link = 'http://' . $item->clubWebsite();
+
 		$style_tags = $item->category();
 		
 		$r = array (

@@ -5,6 +5,8 @@
  * @copyright Released under the GNU GPL, see LICENSE for more Information
  * @author Lucas S. Bickel 
  * @package Core
+ * @subpackage Core
+ * @file
  */
 
 /**
@@ -59,23 +61,20 @@ class PartyCal extends Core_PartyCal implements Core_Interface_Controller_PartyC
 		if ($stmt->execute()) {
 			while ($row = $stmt->fetch()) {
 				var_dump('NAME', $row['event_name']);
-				var_dump('SHORT', $row['desc_text'], 'LONG', $row['desc_html']);
+/**				var_dump('SHORT', $row['desc_text'], 'LONG', $row['desc_html']);
 				var_dump('LOC' , $row['location']);
 				var_dump('TAGS' , $row['style_tags']);
-				var_dump('COST', $row['free'], $row['cost_text']);
+				var_dump('COST', $row['free'], $row['cost_text']);*/
+				var_dump($row['venue_link']);
 			}
 		}
 		return;
 	}
 		$stmt = $this->pdo->prepare("
-                                SELECT event.event_id , event.link
+                                SELECT start_ts ,  strftime('%s', start_ts)
                                 FROM event 
-                                LEFT JOIN event_subscriber 
-                                ON ( event.event_id = event_subscriber.event_id )
-                                WHERE event_subscriber.subscriber_name IS NULL 
-				OR event_subscriber.subscriber_name != 'partilender'
-
-
+				WHERE strftime('%s', start_ts) < strftime('%s', 'now')
+				ORDER BY strftime('%s', start_ts) DESC
 		");
 
 		if ($stmt->execute()) {

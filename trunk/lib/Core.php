@@ -4,7 +4,9 @@
  *
  * @copyright Released under the GNU GPL, see LICENSE for more Information
  * @author Lucas S. Bickel 
- * @package core
+ * @package Core
+ * @subpackage Controller
+ * @file
  *
  * @todo evaluate porting this to zend_controller, do it
  */
@@ -32,8 +34,9 @@ require_once 'ArrayObject/Listing/Subscriber.php';
 /**
  * Abstract Action Controller Class.
  *
- * 
  * This class is not defined abstract but should get used that way anyhow.
+ *
+ * @class
  */
 class Core_PartyCal implements Core_Interface_Controller_PartyCal {
 

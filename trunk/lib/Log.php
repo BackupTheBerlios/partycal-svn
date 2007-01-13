@@ -4,8 +4,8 @@
  *
  * @copyright Released under the GNU GPL, see LICENSE for more Information
  * @author Lucas S. Bickel 
- * @package core
- * @subpackage log
+ * @package Core
+ * @subpackage Log
  * @file
  */
 
