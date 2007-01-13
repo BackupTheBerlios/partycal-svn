@@ -1,0 +1,58 @@
+;core configuration
+[partycal]
+db_dso=sqlite:data/sqlite.db
+
+; add providers here
+[provider-listing]
+petzi=active
+
+; each provider gets an entry like the following
+[provider-petzi]
+; Verbose provider name used for display purposes
+name=Petzi
+; Provider description 
+description=umbrella association of the swiss music clubs
+; Feed Class implementation
+classname=Feed_Petzi_PartyCal
+; Feed filename
+filename=ext/providers/petzi/Feed.php
+; Feed URL
+;feed="http://localhost/~hairmare/newevents_en.rdf"
+; Provider Homepage
+homepage=http://petzi.ch
+
+
+; add subscribers here
+[subscriber-listing]
+googlecal=active
+eventful=active
+
+; each subscriber gets an entry here
+[subscriber-googlecal]
+description=Google Calendar
+classname=Service_Google_Calendar_PartyCal
+filename=ext/subscribers/rest-gdata-gcal/Service.php
+email=you@example.com
+passwd=yourPassword
+; you may also use private feeds here
+feed=http://www.google.com/calendar/feeds/public/full
+
+[subscriber-event]
+name=Eventful.com
+description=Eventful.com Event posting
+classname=Service_Eventful_PartyCal
+filename=ext/subscribers/rest-evdb/Service.php
+user=
+passwd=
+; URL of the EVDB REST-Services
+api_url=http://api.evdb.com
+; you will need to get one of these for eventful
+api_key=someApiKey
+
+; what privacy levels to post at.
+; public (default)
+post_privacy=1
+; private
+;post_privacy=2
+; semi-private
+;post_privacy=3
