@@ -1,0 +1,25 @@
+#!/usr/local/php-cvs/bin/php
+<?php
+/**
+ * PartyCal - a command line based application to discover new events from various sources and repost them to others.
+ *
+ * Released under the GNU GPL or any other OSI certified license.
+ * Lucas S. Bickel 2006
+ */
+
+define('PartyCal_MAIN_METHOD', 'Sync_PartyCal::main()');
+
+if ( !isset( $_ENV['PARTYCAL_ROOT'] ) ) {
+	$_ENV['PARTYCAL_ROOT'] = dirname(__FILE__).'/..';
+}
+
+require_once $_ENV['PARTYCAL_ROOT'].'/lib/Bootstrap.php';
+
+// include_path is now set...
+require_once 'Sync.php';
+
+if (PartyCal_MAIN_METHOD == 'Sync_PartyCal::main()') {
+	$PartyCalSync = new Sync_PartyCal( $argv );
+	$PartyCalSync->main();
+}
+?>

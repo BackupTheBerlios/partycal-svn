@@ -1,0 +1,4 @@
+INSTALL
+-------
+
+Hack lib/PartyCalBootstrap.php and config.partycal.ini. Add bin/ to your path.
