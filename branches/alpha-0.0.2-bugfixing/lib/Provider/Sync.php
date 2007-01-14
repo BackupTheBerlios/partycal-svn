@@ -33,9 +33,9 @@ class Provider_Sync_PartyCal {
 			
 			if ( $event_id = $this->recordExists( $feedreader->getLink( $item ) ) ) {
 
-				$data = $feedreader->getUpdateData( $item );
-				$data['event_id'] = $event_id;
-				$this->updateRecord( $data );
+//				$data = $feedreader->getUpdateData( $item );
+//				$data['event_id'] = $event_id;
+//				$this->updateRecord( $data );
 
 			} else {
 

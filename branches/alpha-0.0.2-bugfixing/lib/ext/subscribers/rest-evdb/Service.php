@@ -298,7 +298,7 @@ class Service_Eventful_PartyCal {
 	 * @todo implement provider_image
 	 */
 	public function insertImage( $evdb_id , $data ) {
-		
+		return true;
 		if ( empty( $data['provider_image'] ) ) {
 			$data['provider_image'] = 'http://petzi.ch/images/logo_petzi.jpg';
 			$data['provider_image_caption'] = 'petzi.ch';
