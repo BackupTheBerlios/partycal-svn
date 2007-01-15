@@ -143,7 +143,7 @@ class Service_Eventful_PartyCal {
 		}
 
 		$rq = $this->login_string
-		    . '&keywords=' . urlencode($data['venue_name'])
+		    . '&keywords=' . urlencode($this->venueFilter($data['venue_name']))
 		    . '&location=' . urlencode($data['city_name']);
 
 		$s = $this->rest->restGet( '/rest/venues/search' , $rq );
@@ -164,6 +164,13 @@ class Service_Eventful_PartyCal {
 		$missing_venue_cache[ $data['city_name'] ][ $data['venue_name'] ] = true;
 
 		return false;
+	}
+
+	public function venueFilter( $name ) {
+		if (substr($name, 0, 11) == "Zoo - Usine") {
+			return "Zoo";
+		}
+		return $name;
 	}
 
 	/**
