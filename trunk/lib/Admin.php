@@ -45,7 +45,9 @@ class Admin_PartyCal extends PartyCal {
 				city_postal TEXT,
 				location TEXT,
 				link TEXT UNIQUE,
-				style_tags TEXT
+				style_tags TEXT,
+				image TEXT,
+				image_desc TEXT
 			)
 		');
 
@@ -62,6 +64,13 @@ class Admin_PartyCal extends PartyCal {
 				event_id INTEGER,
 				raw_data TEXT,
 				last_update TEXT
+			)
+		');
+
+		$this->pdo->query('
+			CREATE TABLE IF NOT EXISTS event_update (
+				event_id INTEGER,
+				flag_name TEXT
 			)
 		');
 	}
@@ -129,6 +138,14 @@ class Admin_PartyCal extends PartyCal {
 
 		// drop backup tables
 		$this->pdo->query('DROP TABLE event_backup');
+	}
+
+	public function updateAlpha2()
+	{
+		$this->pdo->query('
+			ALTER TABLE event
+			ADD image TEXT, image_desc TEXT
+		');
 	}
 
 	public function actionaddsubscriber($mode)

@@ -295,18 +295,16 @@ class Service_Eventful_PartyCal {
 
 	/**
 	 *
-	 * @todo implement provider_image
 	 */
 	public function insertImage( $evdb_id , $data ) {
 		
-		if ( empty( $data['provider_image'] ) ) {
-			$data['provider_image'] = 'http://petzi.ch/images/logo_petzi.jpg';
-			$data['provider_image_caption'] = 'petzi.ch';
+		if ( empty( $data['image'] ) ) {
+			return true;
 		}
 
 		$rq = $this->login_string
-		    . '&image_url=' . $data['provider_image']
-		    . '&caption=' . $data['provider_image_caption'];
+		    . '&image_url=' . $data['image']
+		    . '&caption=' . $data['image_desc'];
 
 		$s = $this->rest->restGet( '/rest/images/new' , $rq );
 		if ($s->isSuccessful()) {

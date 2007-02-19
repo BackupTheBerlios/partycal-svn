@@ -118,6 +118,12 @@ class Provider_Sync_PartyCal {
 		}
 	}
 
+	/**
+	 *
+	 * the comparison made here is based on string matching. thats bad for xml.
+	 * OTOH xmldiff seems to be an np-hard problem. for the time being string 
+	 * comparison will be whats available here.
+	 */
 	public function checkForUpdate( $data ) {
 
 		static $select_last_raw_data_by_event_stmt;
@@ -143,6 +149,8 @@ class Provider_Sync_PartyCal {
 			if ( $row['raw_data'] === $data['raw_data'] ) {
 				return false;
 			}
+			// release DB Lock if we need to insert
+			$select_last_raw_data_by_event_stmt = null;
 			return true;
 		}
 	}
@@ -150,12 +158,25 @@ class Provider_Sync_PartyCal {
 	/**
 	 * Looks for differences and generates flags.
 	 *
+	 * xmldiff seems np-hard. for the time i'll just check for known differences 
+	 * with crude checks. a more complete system can only get implemented when
+	 * xmldiff technology is available or written that will get used in checkForUpdate
+	 * as well.
+	 *
 	 * @param Array $data
 	 * @return Array flags for storeUpdateFlags()
 	 */
 	public function compareLastTwoEvents( $data )
 	{
 		static $select_last_two_raw_events_stmt;
+
+		// load last two events as simplexml
+		
+		// check for new image
+		// check for new description
+
+		// check for onlineSoldOut
+		// check for eventCanceled
 
 		$f = array();
 		return $f;
@@ -231,7 +252,9 @@ class Provider_Sync_PartyCal {
 					city_postal,
 					location,
 					link,
-					style_tags
+					style_tags,
+					image,
+					image_desc
 				) VALUES (
 					:start_ts,
 					:end_ts,
@@ -248,7 +271,9 @@ class Provider_Sync_PartyCal {
 					:city_postal,
 					:location,
 					:link,
-					:style_tags
+					:style_tags,
+					:image,
+					:image_desc
 				);
 			');
 		}
@@ -270,6 +295,8 @@ class Provider_Sync_PartyCal {
 		$ins['location']          = $data['location'];
 		$ins['link']              = $data['link'];
 		$ins['style_tags']        = $data['style_tags'];
+		$ins['image']             = $data['image'];
+		$ins['image_desc']        = $data['image_desc'];
 
 		$insert_event_stmt->execute( $ins );
 
@@ -288,7 +315,7 @@ class Provider_Sync_PartyCal {
 				) VALUES (
 					:event_id,
 					:raw_data,
-					( select datetime(\'now\',\'localtime\') )
+					datetime(\'now\',\'localtime\')
 				)
 			');
 		}

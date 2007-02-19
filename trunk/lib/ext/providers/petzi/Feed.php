@@ -37,6 +37,7 @@ class Feed_Petzi_PartyCal extends Zend_Feed implements Provider_Feed_Interface_P
 
 		$r['flags'] = array();
 		$r['flags']['cancelmsg'] = false;
+		$r['flags']['imgupdate'] = false;
 
 		return $r;
 	}
@@ -128,6 +129,12 @@ class Feed_Petzi_PartyCal extends Zend_Feed implements Provider_Feed_Interface_P
 		$venue_link = 'http://' . $item->clubWebsite();
 
 		$style_tags = $item->category();
+
+		$enc = $this->enclosure();
+		if ($enc['type'] == 'image/jpeg') {	
+			$image = $enc['url'];
+			$image_desc = $item->eventTitle();
+		}
 		
 		$r = array (
 			'start_ts' => $start_ts,
@@ -146,6 +153,8 @@ class Feed_Petzi_PartyCal extends Zend_Feed implements Provider_Feed_Interface_P
 			'location' => $location,
 			'link' => $item->link(),
 			'style_tags' => $style_tags,
+			'image' => $image,
+			'image_desc' => $image_desc,
 			'raw_data' => $item->saveXML()
 		);
 		return $r;
