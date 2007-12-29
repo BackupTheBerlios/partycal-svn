@@ -3,6 +3,11 @@
  * You may find some tests looking for php features in here.
  */
 
+
+/**
+ * actual core tests.
+ *
+ */
 class Partycal_Test_Core extends PHPUnit_Framework_TestCase 
 {
 
