@@ -2,8 +2,10 @@
 /**
  * You may find some tests looking for php features in here.
  *
- * @category Tests
+ * @version  5.2.4
+ * 
  * @package  Partycal
+ * @category Tests
  * @author   Lucas S. Bickel <hairmare@gmail.com>
  * @license  http://www.gnu.org/copyleft/gpl.html GNU GENERAL PUBLIC LICENSE
  * @link     http://partycal.berlios.de
@@ -13,12 +15,11 @@
 /**
  * actual core tests.
  *
- * @category Tests
  * @package  Partycal
+ * @category Tests
  * @author   Lucas S. Bickel <hairmare@gmail.com>
  * @license  http://www.gnu.org/copyleft/gpl.html GNU GENERAL PUBLIC LICENSE
  * @link     http://partycal.berlios.de
- * @class 
  */
 class Partycal_Test_Core extends PHPUnit_Framework_TestCase
 {
