@@ -1,6 +1,10 @@
 <?php
+/**
+ * You may find some tests looking for php features in here.
+ */
 
-class test_core extends PHPUnit_Framework_TestCase {
+class Partycal_Test_Core extends PHPUnit_Framework_TestCase 
+{
 
 	// this tests is quite cheap, it makes shure the whole harness works though.
 	function testTrue()
