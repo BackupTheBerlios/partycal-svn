@@ -11,6 +11,8 @@
  * @link     http://partycal.berlios.de
  */
 
+require_once 'source/tests/core.php';
+require_once 'source/tests/logger.php';
 
 /**
  * actual SuiteLoader
@@ -23,7 +25,15 @@
  */
 class Partycal_Test_Loader
 {
-
+    public static function suite()
+    {
+        $suite = new PHPUnit_Framework_TestSuite('Partycal');
+     
+        $suite->addTestSuite('Partycal_Test_Core');
+        $suite->addTestSuite('Partycal_Test_Logger');
+      
+        return $suite;
+    }
 }
 
 ?>
