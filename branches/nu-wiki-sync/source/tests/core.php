@@ -8,6 +8,11 @@ class test_core extends PHPUnit_Framework_TestCase {
 		$this->assertTrue(true);
 	}
 
+	function testSqliteInstalled()
+	{
+		$this->assertTrue(function_exists('sqlite_open'));
+	}
+
 }
 
 ?>
