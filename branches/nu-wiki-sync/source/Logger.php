@@ -1,10 +1,10 @@
 <?php
 /**
- * contains tests for the logging infrastructure.
+ * Basic Logger for Partycal
  *
  * PHP version 5
  * 
- * @category Tests
+ * @category Logger
  * @package  Partycal
  * @author   Lucas S. Bickel <hairmare@gmail.com>
  * @license  http://www.gnu.org/copyleft/gpl.html GNU GENERAL PUBLIC LICENSE
@@ -12,29 +12,16 @@
  */
 
 /**
- * system under test
- */
-require_once 'source/Logger.php';
-
-/**
- * logger tests.
+ * Logger Class
  *
- * @category Tests
+ * @category Logger
  * @package  Partycal
  * @author   Lucas S. Bickel <hairmare@gmail.com>
  * @license  http://www.gnu.org/copyleft/gpl.html GNU GENERAL PUBLIC LICENSE
  * @link     http://partycal.berlios.de
  */
-class Partycal_Test_Logger extends PHPUnit_Framework_TestCase
+class Partycal_Logger
 {
-    /**
-     * does the loggers constructor work.
-     *
-     * @return void
-     */
-    function testNewLogger()
-    {
-        $this->assertType('Partycal_Logger', new Partycal_Logger());
-    }
 }
+
 ?>
