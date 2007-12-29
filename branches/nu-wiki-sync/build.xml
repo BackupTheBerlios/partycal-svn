@@ -13,7 +13,7 @@
   </target>
   <target name="phpunit">
     <exec executable="phpunit" dir="${basedir}/source" failonerror="on">
-      <arg line=" --log-xml ${basedir}/build/logs/phpunit.xml --log-pmd ${basedir}/build/logs/phpunit.pmd.xml  --coverage-xml  ${basedir}/build/logs/phpunit.coverage.xml --coverage-html ${basedir}/build/coverage Partycal_Test_Core tests/core.php"/>
+      <arg line=" --log-xml ${basedir}/build/logs/phpunit.xml --log-pmd ${basedir}/build/logs/phpunit.pmd.xml  --coverage-xml  ${basedir}/build/logs/phpunit.coverage.xml --coverage-html ${basedir}/build/coverage source_Tests_Core source_Tests_Logger"/>
     </exec>
   </target>
 </project>

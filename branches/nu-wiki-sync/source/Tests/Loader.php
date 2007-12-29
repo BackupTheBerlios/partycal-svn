@@ -11,8 +11,9 @@
  * @link     http://partycal.berlios.de
  */
 
-require_once 'source/tests/core.php';
-require_once 'source/tests/logger.php';
+
+require_once 'source/Tests/Core.php';
+require_once 'source/Tests/Logger.php';
 
 /**
  * actual SuiteLoader
@@ -23,17 +24,8 @@ require_once 'source/tests/logger.php';
  * @license  http://www.gnu.org/copyleft/gpl.html GNU GENERAL PUBLIC LICENSE
  * @link     http://partycal.berlios.de
  */
-class Partycal_Test_Loader
+class Partycal_Test_Loader extends PHPUnit_Runner_StandardTestSuiteLoader
 {
-    public static function suite()
-    {
-        $suite = new PHPUnit_Framework_TestSuite('Partycal');
-     
-        $suite->addTestSuite('Partycal_Test_Core');
-        $suite->addTestSuite('Partycal_Test_Logger');
-      
-        return $suite;
-    }
 }
 
 ?>

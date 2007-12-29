@@ -21,7 +21,7 @@
  * @license  http://www.gnu.org/copyleft/gpl.html GNU GENERAL PUBLIC LICENSE
  * @link     http://partycal.berlios.de
  */
-class Partycal_Test_Core extends PHPUnit_Framework_TestCase
+class Partycal_Tests_Core extends PHPUnit_Framework_TestCase
 {
 
     /**
