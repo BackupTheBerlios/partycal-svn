@@ -2,10 +2,10 @@
 /**
  * You may find some tests looking for php features in here.
  *
- * @version  5.2.4
+ * PHP version 5
  * 
- * @package  Partycal
  * @category Tests
+ * @package  Partycal
  * @author   Lucas S. Bickel <hairmare@gmail.com>
  * @license  http://www.gnu.org/copyleft/gpl.html GNU GENERAL PUBLIC LICENSE
  * @link     http://partycal.berlios.de
@@ -15,8 +15,8 @@
 /**
  * actual core tests.
  *
- * @package  Partycal
  * @category Tests
+ * @package  Partycal
  * @author   Lucas S. Bickel <hairmare@gmail.com>
  * @license  http://www.gnu.org/copyleft/gpl.html GNU GENERAL PUBLIC LICENSE
  * @link     http://partycal.berlios.de
