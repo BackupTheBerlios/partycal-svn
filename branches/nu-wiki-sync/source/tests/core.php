@@ -13,6 +13,11 @@ class test_core extends PHPUnit_Framework_TestCase {
 		$this->assertTrue(function_exists('sqlite_open'));
 	}
 
+	function testStreamWrapperHttpExists()
+	{
+		$this->assertTrue(in_array('http', stream_get_wrappers()));
+	}
+
 }
 
 ?>
