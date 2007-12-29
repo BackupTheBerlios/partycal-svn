@@ -16,6 +16,7 @@ class test_core extends PHPUnit_Framework_TestCase {
 	function testStreamWrapperHttpExists()
 	{
 		$this->assertTrue(in_array('http', stream_get_wrappers()));
+		$this->assertTrue(in_array('https', stream_get_wrappers()));
 	}
 
 }
