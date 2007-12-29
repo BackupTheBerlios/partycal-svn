@@ -5,7 +5,7 @@
  * @category Tests
  * @package  Partycal
  * @author   Lucas S. Bickel <hairmare@gmail.com>
- * @license  GPL
+ * @license  http://www.gnu.org/copyleft/gpl.html GNU GENERAL PUBLIC LICENSE
  * @link     http://partycal.berlios.de
  */
 
@@ -13,11 +13,21 @@
 /**
  * actual core tests.
  *
+ * @category Tests
+ * @package  Partycal
+ * @author   Lucas S. Bickel <hairmare@gmail.com>
+ * @license  http://www.gnu.org/copyleft/gpl.html GNU GENERAL PUBLIC LICENSE
+ * @link     http://partycal.berlios.de
  * @class 
  */
-class Partycal_Test_Core extends PHPUnit_Framework_TestCase 
+class Partycal_Test_Core extends PHPUnit_Framework_TestCase
 {
 
+    /**
+     * make shure eveything is go
+     *
+     * @return void
+     */
     function testTrue()
     {
         $this->assertTrue(true);
@@ -25,12 +35,19 @@ class Partycal_Test_Core extends PHPUnit_Framework_TestCase
 
     /**
      * check if sqlite is installed
+     *
+     * @return void
      */
     function testSqliteInstalled()
     {
         $this->assertTrue(function_exists('sqlite_open'));
     }
 
+    /**
+     * look for needed stream wrappers
+     *
+     * @return void
+     */
     function testStreamWrapperHttpExists()
     {
         $this->assertTrue(in_array('http', stream_get_wrappers()));
